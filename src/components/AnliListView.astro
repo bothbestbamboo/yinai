@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Sidebar from './Sidebar.astro';
 import Pagination from './Pagination.astro';
+import SubBanner from './SubBanner.astro';
 import { getAnliUrl, type AnliEntry } from '../utils/content';
 
 interface Props {
@@ -17,7 +18,7 @@ const { items, currentPage, totalPages } = Astro.props;
   description="宜耐竹地板、重竹地板及户外高耐重竹地板全国酒店、公园、住宅工程安装案例展示。"
   activeNav="anli"
 >
-  <div class="zhaoshang-banner" style="background-image:url(/images/pro-bannner-bg.jpg);"></div>
+  <SubBanner preset="anli" />
 
   <div class="w">
     <div class="posi">

@@ -1,0 +1,101 @@
+---
+export type BannerPreset =
+  | 'about'
+  | 'product'
+  | 'news'
+  | 'jiameng'
+  | 'anli'
+  | 'faq'
+  | 'search';
+
+interface Props {
+  preset: BannerPreset;
+}
+
+interface BannerConfig {
+  bg: string;
+  title: string;
+  en: string;
+  desc: string;
+  scrim?: 'default' | 'strong';
+  align?: 'left' | 'right';
+  bgPosition?: string;
+}
+
+const BANNER_PRESETS: Record<BannerPreset, BannerConfig> = {
+  about: {
+    bg: '/images/gy.jpg',
+    title: '关于宜耐',
+    en: 'ABOUT ECONICE',
+    desc: '深耕竹木地板研发与制造，以严苛工艺铸就耐用空间',
+    scrim: 'default',
+    align: 'left',
+  },
+  product: {
+    bg: '/images/chanpin-banner-bg.jpg',
+    title: '宜耐产品',
+    en: 'OUR PRODUCTS',
+    desc: '室内外五大地板与板材系列，满足家装与工装多元需求',
+    scrim: 'strong',
+    align: 'left',
+  },
+  news: {
+    bg: '/images/news-banner.jpg',
+    title: '宜耐新闻',
+    en: 'NEWS & INSIGHTS',
+    desc: '洞察竹木行业趋势，分享选购指南、保养知识与品牌动态',
+    scrim: 'strong',
+    align: 'left',
+  },
+  jiameng: {
+    bg: '/images/zhaoshang-banner-bg.jpg',
+    title: '招商加盟',
+    en: 'JOIN US',
+    desc: '源头厂家直供与全周期帮扶，诚邀伙伴共拓绿色建材市场',
+    scrim: 'default',
+    align: 'right',
+    bgPosition: 'center 22%',
+  },
+  anli: {
+    bg: '/images/pro-bannner-bg.jpg',
+    title: '工程案例',
+    en: 'PROJECT CASES',
+    desc: '匠心落地商旅、市政与人居项目，用实景见证持久品质',
+    scrim: 'default',
+    align: 'left',
+  },
+  faq: {
+    bg: '/images/news-banner.jpg',
+    title: '常见问题',
+    en: 'FAQ & GUIDE',
+    desc: '专业解答竹地板地暖适配、防潮防变形与日常保养疑问',
+    scrim: 'strong',
+    align: 'left',
+  },
+  search: {
+    bg: '/images/chanpin-banner-bg.jpg',
+    title: '站内搜索',
+    en: 'SITE SEARCH',
+    desc: '快速检索宜耐全站产品型号、新闻动态、工程案例与常见问题',
+    scrim: 'strong',
+    align: 'left',
+  },
+};
+
+const { preset } = Astro.props;
+const cfg = BANNER_PRESETS[preset];
+const styleStr = `background-image:url(${cfg.bg});${cfg.bgPosition ? `background-position:${cfg.bgPosition};` : ''}`;
+---
+<section
+  class={`zhaoshang-banner sub-banner sub-banner--${cfg.align || 'left'} sub-banner--scrim-${cfg.scrim || 'default'}`}
+  style={styleStr}
+>
+  <div class="sub-banner-scrim" aria-hidden="true"></div>
+  <div class="w sub-banner-inner">
+    <div class="sub-banner-box">
+      <p class="sub-banner-en">{cfg.en}</p>
+      <p class="sub-banner-title">{cfg.title}</p>
+      <p class="sub-banner-desc">{cfg.desc}</p>
+    </div>
+  </div>
+</section>

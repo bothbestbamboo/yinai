@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SubBanner from '../../components/SubBanner.astro';
 
 const jiamengTabs = [
   { href: '/jiameng/', icon: '/images/six-1.png', label: '加盟前景', key: 'jiameng' },
@@ -16,7 +17,7 @@ const jiamengTabs = [
   description="欢迎全国代理商、设计师、经销商与装饰装修公司申请加盟宜耐地板。"
   activeNav="jiameng"
 >
-  <div class="zhaoshang-banner" style="background-image:url(/images/zhaoshang-banner-bg.jpg);"></div>
+  <SubBanner preset="jiameng" />
 
   <div class="w">
     <div class="posi">

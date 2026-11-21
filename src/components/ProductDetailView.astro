@@ -1,6 +1,7 @@
 ---
 import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SubBanner from './SubBanner.astro';
 import { PRODUCT_SERIES } from '../data/site';
 import { getProductUrl, type ProductEntry } from '../utils/content';
 
@@ -30,7 +31,7 @@ const backListHref = seriesInfo ? seriesInfo.href : '/product/';
   description={product.data.description}
   activeNav="product"
 >
-  <div class="zhaoshang-banner" style="background-image:url(/images/chanpin-banner-bg.jpg);"></div>
+  <SubBanner preset="product" />
 
   <div class="w">
     <div class="posi">

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SubBanner from '../../components/SubBanner.astro';
 import singlePagesData from '../../data/singlePages.json';
 
 interface SinglePageRecord {
@@ -67,7 +68,7 @@ const tabs = meta.group === 'about' ? ABOUT_TABS : meta.group === 'jiameng' ? JI
   description={content.description}
   activeNav={meta.group}
 >
-  <div class="zhaoshang-banner" style={`background-image:url(${meta.banner});`}></div>
+  <SubBanner preset={meta.group} />
 
   <div class="w">
     <div class="posi">
@@ -92,8 +93,8 @@ const tabs = meta.group === 'about' ? ABOUT_TABS : meta.group === 'jiameng' ? JI
     )}
 
     <article
-  class="zs-body f14 c0"
-  set:html={content.bodyHtml.replace(/<img(?![^>]*\bloading=)/gi, '<img loading="lazy" decoding="async"')}
-/>
+      class="zs-body f14 c0"
+      set:html={content.bodyHtml.replace(/<img(?![^>]*\bloading=)/gi, '<img loading="lazy" decoding="async"')}
+    />
   </div>
 </BaseLayout>

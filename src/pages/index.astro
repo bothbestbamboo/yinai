@@ -29,20 +29,56 @@ const sectionSeries = sectionSeriesOrder.map((key) => PRODUCT_SERIES.find((s) =>
 ---
 <BaseLayout activeNav="home">
   <!-- 大图轮播 -->
-  <!-- 大图轮播 -->
   <section id="slideBox" class="slideBox pr">
     <div class="bd">
       <ul>
         {HOME_BANNERS.map((b, i) => (
           <li class={i === 0 ? 'is-active' : ''}>
-            <a href={b.href}>
+            <div class={`banner-slide banner-slide--${b.layout}`}>
               <img
                 src={b.img}
                 alt={b.alt}
                 loading={i === 0 ? 'eager' : 'lazy'}
                 fetchpriority={i === 0 ? 'high' : 'auto'}
               />
-            </a>
+              <div class="hero-scrim" aria-hidden="true"></div>
+              <span class="hero-watermark" aria-hidden="true">{b.watermark}</span>
+
+              <div class="hero-overlay">
+                <div class="w">
+                  <div class="hero-content">
+                    <div class="hero-eyebrow">
+                      <span class="hero-badge">{b.badge}</span>
+                      <span class="hero-en">{b.enTag}</span>
+                    </div>
+
+                    {i === 0 ? (
+                      <h1 class="hero-title">
+                        <span class="hero-title-lead">{b.titleLead}</span>
+                        <span class="hero-title-sep" aria-hidden="true">·</span>
+                        <span class="hero-title-main">{b.titleMain}</span>
+                      </h1>
+                    ) : (
+                      <h2 class="hero-title">
+                        <span class="hero-title-lead">{b.titleLead}</span>
+                        <span class="hero-title-sep" aria-hidden="true">，</span>
+                        <span class="hero-title-main">{b.titleMain}</span>
+                      </h2>
+                    )}
+
+                    <div class="hero-features">
+                      {b.features.map((feat) => (
+                        <span>{feat}</span>
+                      ))}
+                    </div>
+
+                    <div class="hero-stamp-wrap">
+                      <span class="hero-stamp">{b.stamp}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
         ))}
       </ul>

@@ -1,6 +1,7 @@
 ---
 import { PRODUCT_SERIES, FILTER_GROUPS } from '../data/site';
 import Pagination from './Pagination.astro';
+import SubBanner from './SubBanner.astro';
 import { getProductUrl, pickFeaturedProducts, type ProductEntry } from '../utils/content';
 
 interface Props {
@@ -36,7 +37,7 @@ const clientProducts = allProducts.map((p) => ({
 
 const serializedProducts = JSON.stringify(clientProducts).replace(/</g, '\\u003c');
 ---
-<div class="zhaoshang-banner" style="background-image:url(/images/chanpin-banner-bg.jpg);"></div>
+<SubBanner preset="product" />
 
 <div class="w">
   <div class="posi">

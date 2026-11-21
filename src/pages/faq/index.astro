@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
+import SubBanner from '../../components/SubBanner.astro';
 import { getAllFaq, getFaqUrl, formatYearMonth } from '../../utils/content';
 
 const faqs = await getAllFaq();
@@ -11,7 +12,7 @@ const faqs = await getAllFaq();
   description="宜耐地板为您专业解答竹地板在北方使用、地暖适配、防虫防潮及防变形等常见问题。"
   activeNav="news"
 >
-  <div class="zhaoshang-banner" style="background-image:url(/images/news-banner.jpg);"></div>
+  <SubBanner preset="faq" />
 
   <div class="w">
     <div class="posi">

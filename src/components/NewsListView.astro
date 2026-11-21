@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Sidebar from './Sidebar.astro';
 import Pagination from './Pagination.astro';
+import SubBanner from './SubBanner.astro';
 import { getNewsUrl, formatYearMonth, type NewsEntry } from '../utils/content';
 
 interface Props {
@@ -17,7 +18,7 @@ const { items, currentPage, totalPages } = Astro.props;
   description="宜耐地板最新企业动态、行业资讯与竹木地板、SPC石塑地板选购保养指南。"
   activeNav="news"
 >
-  <div class="zhaoshang-banner" style="background-image:url(/images/news-banner.jpg);"></div>
+  <SubBanner preset="news" />
 
   <div class="w">
     <div class="posi">

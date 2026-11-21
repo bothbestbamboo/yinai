@@ -1,13 +1,27 @@
 export const HOME_BANNERS = [
   {
+    layout: 'left' as const,
     img: '/d/file/haibao/2018-05-17/4bd8d6fbfe1ee12c2648ba68b84ffc29.jpg',
     alt: '宜耐地板品牌海报',
-    href: '/product/',
+    watermark: 'ECONICE',
+    enTag: 'ECONICE BAMBOO FLOORING',
+    badge: '源头工厂 · 品质之选',
+    titleLead: '宜家宜室',
+    titleMain: '匠造耐用好地板',
+    features: ['高密耐磨', '环保低醛', '稳定抗压', '历久弥新'],
+    stamp: '欧美同款品质 · 源头厂家直供',
   },
   {
+    layout: 'center' as const,
     img: '/d/file/haibao/2018-03-07/837542c4bd346948c222174b7bd71acd.jpg',
     alt: '宜耐竹地板与SPC石塑地板',
-    href: '/product/shisu/',
+    watermark: 'NATURAL',
+    enTag: 'NATURAL & ECO-FRIENDLY',
+    badge: '以竹代木 · 全系直供',
+    titleLead: '把自然竹韵',
+    titleMain: '铺进理想家',
+    features: ['普竹地板', '重竹地板', '石塑地板', '户外地板', '家具板材'],
+    stamp: '低碳环保建材 · 居家工装优选',
   },
 ];
 
