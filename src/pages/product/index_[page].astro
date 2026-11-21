@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCenter from '../../components/ProductCenter.astro';
+import { getAllProducts } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const PAGE_SIZE = 15;
+  const allProducts = await getAllProducts();
+  const totalPages = Math.max(1, Math.ceil(allProducts.length / PAGE_SIZE));
+  const paths = [];
+  for (let p = 2; p <= totalPages; p++) {
+    paths.push({
+      params: { page: String(p) },
+      props: {
+        currentPage: p,
+        totalPages,
+        pageProducts: allProducts.slice((p - 1) * PAGE_SIZE, p * PAGE_SIZE),
+        allProducts,
+      },
+    });
+  }
+  return paths;
+}
+
+const { currentPage, totalPages, pageProducts, allProducts } = Astro.props;
+---
+<BaseLayout
+  title={`宜耐产品 第${currentPage}页 | 竹地板 | 重竹地板 | 户外高耐重竹地板`}
+  activeNav="product"
+>
+  <ProductCenter
+    titleHeading="宜耐产品"
+    pageProducts={pageProducts}
+    scopeProducts={allProducts}
+    allProducts={allProducts}
+    basePath="/product"
+    currentPage={currentPage}
+    totalPages={totalPages}
+  />
+</BaseLayout>

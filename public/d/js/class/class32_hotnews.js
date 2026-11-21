@@ -1,0 +1,1 @@
+document.write("<li><a href=\"/faq/beifang.html\" title=\"竹地板在北方可以使用吗？\">竹地板在北方可以使用吗？</a></li><li><a href=\"/faq/bianxing.html\" title=\"竹地板会开裂和变形吗？\">竹地板会开裂和变形吗？</a></li><li><a href=\"/faq/shengchong.html\" title=\"竹地板会生虫吗？\">竹地板会生虫吗？</a></li><li><a href=\"/faq/dinuan.html\" title=\"竹地板适用于地热与地暖吗？\">竹地板适用于地热与地暖吗？</a></li>");

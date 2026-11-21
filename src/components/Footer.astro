@@ -1,0 +1,82 @@
+---
+import { SITE, PRODUCT_SERIES } from '../data/site';
+const footerSeries = PRODUCT_SERIES.slice(0, 3);
+---
+<footer class="site-footer">
+  <div class="bot">
+    <div class="liucheng w">
+      <img src="/images/liucheng.png" alt="宜耐服务流程" />
+    </div>
+    <div class="bot-cont w">
+      <div class="bot-left">
+        <div class="bot-tel">
+          <img src="/images/bot-tel.png" alt="热线电话" />
+          <a href={`tel:${SITE.phoneRaw}`} class="cf"><b>{SITE.phoneTel}</b></a>
+        </div>
+        <div class="bot-qiehuan">
+          <div class="hd">
+            <ul>
+              <li class="b-li-1 on">
+                <span></span>
+                <div>
+                  <img width="97" height="98" src="/images/weixin-1.jpg" alt="宜耐微信" loading="lazy" />
+                  <p class="f13 cf b tc">宜耐微信</p>
+                </div>
+              </li>
+              <li class="b-li-2">
+                <span></span>
+                <div>
+                  <img width="97" height="98" src="/images/weixin-2.jpg" alt="宜耐QQ" loading="lazy" />
+                  <p class="f13 cf b tc">宜耐QQ</p>
+                </div>
+              </li>
+              <li class="b-li-3">
+                <span></span>
+                <div>
+                  <img width="97" height="98" src="/images/weixin-3.jpg" alt="宜耐支付宝" loading="lazy" />
+                  <p class="f13 cf b tc">宜耐支付宝</p>
+                </div>
+              </li>
+              <li class="b-li-5">
+                <span></span>
+                <div>
+                  <img width="97" height="98" src="/images/weixin-5.jpg" alt="宜耐旺铺" loading="lazy" />
+                  <p class="f13 cf b tc">宜耐旺铺</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bot-right">
+        <ul class="bot-links">
+          <li class="f18">
+            <dl>
+              <dt><a href="/about/">关于宜耐</a></dt>
+              <dt><a href="/product/">宜耐产品</a></dt>
+              <dt><a href="/news/">宜耐新闻</a></dt>
+              <dt><a href="/jiameng/">招商加盟</a></dt>
+              <dt><a href="/anli/">工程案例</a></dt>
+            </dl>
+          </li>
+          {footerSeries.map((series) => (
+            <li class="f16">
+              <dl>
+                <dt class="f18"><a href={series.href}>{series.name}</a></dt>
+                {series.links.map((item) => (
+                  <dd><a href={item.href}>{item.title}</a></dd>
+                ))}
+              </dl>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-copy w tc">
+      ©{new Date().getFullYear()} {SITE.name} · {SITE.address} &nbsp;|&nbsp; {SITE.email} <br />
+      {SITE.beianGongan} &nbsp;&nbsp; {SITE.beianIcp}
+    </div>
+  </div>
+</footer>

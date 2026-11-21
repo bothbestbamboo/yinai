@@ -1,0 +1,9 @@
+---
+import AnliListView from '../../components/AnliListView.astro';
+import { getAllAnli } from '../../utils/content';
+
+const PAGE_SIZE = 24;
+const list = await getAllAnli();
+const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+---
+<AnliListView items={list.slice(0, PAGE_SIZE)} currentPage={1} totalPages={totalPages} />

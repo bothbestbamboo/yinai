@@ -1,0 +1,9 @@
+---
+import NewsListView from '../../components/NewsListView.astro';
+import { getMainNews } from '../../utils/content';
+
+const PAGE_SIZE = 25;
+const news = await getMainNews();
+const totalPages = Math.max(1, Math.ceil(news.length / PAGE_SIZE));
+---
+<NewsListView items={news.slice(0, PAGE_SIZE)} currentPage={1} totalPages={totalPages} />

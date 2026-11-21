@@ -1,0 +1,66 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import { getAllNewsRaw, getMainNews, getNewsUrl } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const allRaw = await getAllNewsRaw();
+  const mainList = await getMainNews();
+
+  return allRaw.map((entry) => {
+    const idx = mainList.findIndex((m) => m.data.slugName === entry.data.slugName);
+    return {
+      params: { slug: entry.data.slugName },
+      props: {
+        entry,
+        prevItem: idx >= 0 && idx < mainList.length - 1 ? mainList[idx + 1] : undefined,
+        nextItem: idx > 0 ? mainList[idx - 1] : undefined,
+      },
+    };
+  });
+}
+
+const { entry, prevItem, nextItem } = Astro.props;
+const { Content } = await render(entry);
+---
+<BaseLayout
+  title={entry.data.title}
+  keywords={entry.data.keywords}
+  description={entry.data.description}
+  activeNav="news"
+>
+  <div class="zhaoshang-banner" style="background-image:url(/images/news-banner.jpg);"></div>
+
+  <div class="w">
+    <div class="posi">
+      当前位置：<a href="/">首页</a> - <a href="/news/">宜耐新闻</a>
+    </div>
+  </div>
+
+  <div class="w sub-layout">
+    <Sidebar />
+
+    <article class="news-deta">
+      <div class="news-deta-cont">
+        <h1 class="tc c6" style="line-height:1.5;padding:14px 0 8px;font-size:26px;">{entry.data.title}</h1>
+        {entry.data.pubDate && (
+          <p class="news-deta-p tc f14 cg">发布日期：{entry.data.pubDate}</p>
+        )}
+        <div class="news-deta-body">
+          <Content />
+        </div>
+      </div>
+      <div class="pian f14">
+        <p class="cr">
+          <span>上一篇：</span>
+          {prevItem ? <a href={getNewsUrl(prevItem)}>{prevItem.data.title}</a> : <a href="/news/">返回列表</a>}
+        </p>
+        <p class="cr">
+          <span>下一篇：</span>
+          {nextItem ? <a href={getNewsUrl(nextItem)}>{nextItem.data.title}</a> : <a href="/news/">返回列表</a>}
+        </p>
+      </div>
+    </article>
+  </div>
+</BaseLayout>

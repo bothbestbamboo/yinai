@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCenter from '../../components/ProductCenter.astro';
+import { getAllProducts } from '../../utils/content';
+
+const PAGE_SIZE = 15;
+const allProducts = await getAllProducts();
+const totalPages = Math.max(1, Math.ceil(allProducts.length / PAGE_SIZE));
+const pageProducts = allProducts.slice(0, PAGE_SIZE);
+---
+<BaseLayout
+  title="宜耐产品 | 竹地板 | 重竹地板 | 户外高耐重竹地板"
+  keywords="宜耐产品, 竹地板, 重竹地板, 户外高耐重竹地板, SPC石塑地板"
+  description="宜耐地板产品涵盖普竹地板、重竹地板、户外高耐重竹地板、竹家具板材与SPC石塑锁扣地板五大系列。"
+  activeNav="product"
+>
+  <ProductCenter
+    titleHeading="宜耐产品"
+    pageProducts={pageProducts}
+    scopeProducts={allProducts}
+    allProducts={allProducts}
+    basePath="/product"
+    currentPage={1}
+    totalPages={totalPages}
+  />
+</BaseLayout>

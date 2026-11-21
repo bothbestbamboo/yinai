@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const jiamengTabs = [
+  { href: '/jiameng/', icon: '/images/six-1.png', label: '加盟前景', key: 'jiameng' },
+  { href: '/youshi/', icon: '/images/six-2.png', label: '加盟优势', key: 'youshi' },
+  { href: '/zhichi/', icon: '/images/six-3.png', label: '加盟支持', key: 'zhichi' },
+  { href: '/tiaojian/', icon: '/images/six-4.png', label: '加盟条件', key: 'tiaojian' },
+  { href: '/zhongduan/', icon: '/images/six-5.png', label: '终端形象', key: 'zhongduan' },
+  { href: '/shenqing/', icon: '/images/six-6.png', label: '加盟申请', key: 'shenqing' },
+];
+---
+<BaseLayout
+  title="欢迎设计师、经销商加盟宜耐地板"
+  keywords="宜耐, 代理, 加盟, 设计师, 经销商, 装饰装修公司"
+  description="欢迎全国代理商、设计师、经销商与装饰装修公司申请加盟宜耐地板。"
+  activeNav="jiameng"
+>
+  <div class="zhaoshang-banner" style="background-image:url(/images/zhaoshang-banner-bg.jpg);"></div>
+
+  <div class="w">
+    <div class="posi">
+      当前位置：<a href="/">首页</a> - <a href="/jiameng/">招商加盟</a> - <a href="/shenqing/">加盟申请</a>
+    </div>
+  </div>
+
+  <div class="w">
+    <div class="zs-six">
+      <ul>
+        {jiamengTabs.map((tab) => (
+          <li class={tab.key === 'shenqing' ? 'now' : ''}>
+            <a href={tab.href}>
+              <div><img src={tab.icon} alt={tab.label} /></div>
+              <p class="f14">{tab.label}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="zs-body f14 c0">
+      <div class="fackbook-wrap">
+        <form id="joinForm" class="fackbook-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="81ff5088-e596-4b27-851b-cbaf5ab4a4f9" />
+          <input type="hidden" name="subject" value="宜耐地板官网 - 新的招商加盟申请" />
+          <input type="hidden" name="from_name" value="宜耐地板官网" />
+          <input type="checkbox" name="botcheck" style="display:none;" />
+
+          <div class="form-row">
+            <label for="name"><em>*</em>姓名</label>
+            <input id="name" name="姓名" type="text" required placeholder="请输入您的姓名" />
+          </div>
+
+          <div class="form-row">
+            <label><em>*</em>性别</label>
+            <div class="radio-group">
+              <label><input name="性别" type="radio" value="男" checked /> 男</label>
+              <label><input name="性别" type="radio" value="女" /> 女</label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="city"><em>*</em>加盟区域 / 具体城市名</label>
+            <input id="city" name="加盟城市" type="text" required placeholder="如：浙江省杭州市" />
+          </div>
+
+          <div class="form-row">
+            <label for="mycall"><em>*</em>移动电话</label>
+            <input id="mycall" name="联系电话" type="text" required placeholder="请输入手机号码" />
+          </div>
+
+          <div class="form-row">
+            <label for="qq">微信 / QQ号码</label>
+            <input id="qq" name="微信或QQ" type="text" placeholder="选填" />
+          </div>
+
+          <div class="form-row">
+            <label><em>*</em>店面情况</label>
+            <div class="radio-group">
+              <label><input name="店面情况" type="radio" value="自有" checked /> 自有</label>
+              <label><input name="店面情况" type="radio" value="租赁" /> 租赁</label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="wzsm"><em>*</em>位置说明</label>
+            <input id="wzsm" name="位置说明" type="text" required placeholder="如：某某建材市场A区" />
+          </div>
+
+          <div class="form-row">
+            <label for="bj"><em>*</em>面积</label>
+            <input id="bj" name="店面面积" type="text" required placeholder="如：120平方米" />
+          </div>
+
+          <div class="form-row">
+            <label for="ms">申请人过往从业经验描述</label>
+            <div>
+              <textarea id="ms" name="从业经验" placeholder="何种生意、经营时间、公司名称、主要业务等"></textarea>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <span></span>
+            <div>
+              <button type="submit" class="submit-btn" id="submitBtn">提交加盟申请</button>
+              <p id="formResult" style="margin-top:12px;font-weight:700;"></p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  const form = document.getElementById('joinForm');
+  const btn = document.getElementById('submitBtn');
+  const result = document.getElementById('formResult');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = '正在提交...';
+      result.style.color = '#666';
+      result.textContent = '正在发送您的申请，请稍候...';
+
+      try {
+        const formData = new FormData(form);
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+        if (data.success) {
+          result.style.color = '#5b8a00';
+          result.textContent = '提交成功！我们已收到您的加盟申请，招商经理将尽快与您联系。';
+          form.reset();
+        } else {
+          result.style.color = '#D20000';
+          result.textContent = '提交失败：' + (data.message || '请稍后重试或直接致电 150-0582-0528。');
+        }
+      } catch {
+        result.style.color = '#D20000';
+        result.textContent = '网络异常，请检查网络后重试，或直接致电 150-0582-0528。';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '提交加盟申请';
+      }
+    });
+  }
+</script>

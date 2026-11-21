@@ -1,0 +1,33 @@
+---
+import ProductDetailView from '../../../components/ProductDetailView.astro';
+import { getAllProducts } from '../../../utils/content';
+
+export async function getStaticPaths() {
+  const allProducts = await getAllProducts();
+  const catProducts = allProducts.filter((p) => p.data.category !== 'other');
+
+  return catProducts.map((product) => {
+    const sameCategory = catProducts.filter((p) => p.data.category === product.data.category);
+    const idx = sameCategory.findIndex((p) => p.data.slugName === product.data.slugName);
+    return {
+      params: { category: product.data.category, slug: product.data.slugName },
+      props: {
+        product,
+        sameCategory,
+        latestProducts: allProducts,
+        prevProduct: idx < sameCategory.length - 1 ? sameCategory[idx + 1] : undefined,
+        nextProduct: idx > 0 ? sameCategory[idx - 1] : undefined,
+      },
+    };
+  });
+}
+
+const { product, sameCategory, latestProducts, prevProduct, nextProduct } = Astro.props;
+---
+<ProductDetailView
+  product={product}
+  sameCategory={sameCategory}
+  latestProducts={latestProducts}
+  prevProduct={prevProduct}
+  nextProduct={nextProduct}
+/>

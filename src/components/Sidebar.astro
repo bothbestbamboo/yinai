@@ -1,0 +1,48 @@
+---
+import { getMainNews, getAllProducts, pickHotProducts, getNewsUrl, getProductUrl } from '../utils/content';
+
+const latestNews = (await getMainNews()).slice(0, 7);
+const allProducts = await getAllProducts();
+const hotProducts = pickHotProducts(allProducts, 6);
+---
+<aside class="com-left">
+  <div class="com-left-t">
+    <div class="cf">
+      <p class="b f20">最新动态</p>
+      <span class="f18">NEWS</span>
+    </div>
+    <ul>
+      {latestNews.map((item) => (
+        <li>
+          <span class="cr">&gt;&gt;</span>{' '}
+          <a href={getNewsUrl(item)} title={item.data.title}>{item.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="com-left-b">
+    <div class="cf">
+      <p class="b f20">热销商品</p>
+      <span class="f18">HOT COMMODITY</span>
+    </div>
+    <ul class="border">
+      {hotProducts.map((p) => (
+        <li>
+          <a href={getProductUrl(p)}>
+            <img width="171" height="160" src={p.data.cover || '/images/logo.png'} alt={p.data.title} loading="lazy" />
+            <p>
+              {p.data.title}
+              {p.data.model && (
+                <>
+                  <br />
+                  <b>型号：</b>{p.data.model}
+                </>
+              )}
+            </p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</aside>

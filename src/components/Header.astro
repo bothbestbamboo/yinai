@@ -1,0 +1,93 @@
+---
+import { SITE, PRODUCT_SERIES } from '../data/site';
+
+interface Props {
+  activeNav?: string;
+}
+const { activeNav = '' } = Astro.props;
+---
+<header class="site-header">
+  <div class="top">
+    <div class="w2 top-inner">
+      <div class="fl">
+        <span class="cf">欢迎来到宜耐地板！</span>
+      </div>
+      <div class="fr cf top-actions">
+        <div class="cf pr wx-hover">
+          <img src="/images/top-weixin.png" alt="微信" />微信扫码
+          <div class="pa wx-qr">
+            <img src="/images/weixin-top.jpg" alt="宜耐地板微信二维码" />
+          </div>
+        </div>
+        <span>|</span>
+        <button type="button" class="cf top-btn" id="btn-favorite">加入收藏</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="head">
+    <div class="w head-inner">
+      <div class="head-logo">
+        <a href="/"><img src="/images/logo.png" alt="宜耐地板 Econice" /></a>
+      </div>
+      <div class="head-right">
+        <form class="search-form" action="/search/" method="get">
+          <input type="text" name="q" placeholder="请输入产品或文章关键词" aria-label="站内搜索" />
+          <button class="f16 cf" type="submit">搜一搜</button>
+        </form>
+        <a class="head-phone" href={`tel:${SITE.phoneRaw}`}>
+          <img src="/images/head-telphone.png" alt="联系电话" />
+          <span class="cg">{SITE.phoneDisplay}</span>
+        </a>
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="打开导航菜单" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="nav" id="mainNav" aria-label="主导航">
+    <div class="w2 nav-inner">
+      <ul class="nav-list">
+        <li class={activeNav === 'home' ? 'now' : ''}>
+          <a class="one" href="/">首页</a>
+        </li>
+        <li class={activeNav === 'about' ? 'now' : ''}>
+          <a class="one" href="/about/">关于宜耐</a>
+        </li>
+        <li class={`has-mega ${activeNav === 'product' ? 'now' : ''}`}>
+          <div class="nav-link-row">
+            <a class="one" href="/product/">宜耐产品</a>
+            <button type="button" class="mobile-sub-toggle" aria-label="展开产品系列">▾</button>
+          </div>
+          <div class="mega-menu">
+            <div class="mega-grid">
+              {PRODUCT_SERIES.map((series) => (
+                <div class="mega-col">
+                  <a class="two" href={series.href}>
+                    <img width="170" height="95" src={series.navImg} alt={series.name} loading="lazy" />
+                    <h3 class="n cf f16">&gt;&gt; {series.name}</h3>
+                  </a>
+                  <ol>
+                    {series.links.map((item) => (
+                      <li><a href={item.href}>{item.title}</a></li>
+                    ))}
+                  </ol>
+                </div>
+              ))}
+            </div>
+          </div>
+        </li>
+        <li class={activeNav === 'news' ? 'now' : ''}>
+          <a class="one" href="/news/">宜耐新闻</a>
+        </li>
+        <li class={activeNav === 'jiameng' ? 'now' : ''}>
+          <a class="one" href="/jiameng/">招商加盟</a>
+        </li>
+        <li class={activeNav === 'anli' ? 'now' : ''}>
+          <a class="one" href="/anli/">工程案例</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

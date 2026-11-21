@@ -1,0 +1,25 @@
+---
+import ProductDetailView from '../../components/ProductDetailView.astro';
+import { getAllProducts } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const allProducts = await getAllProducts();
+  const rootProducts = allProducts.filter((p) => p.data.category === 'other');
+
+  return rootProducts.map((product) => ({
+    params: { slug: product.data.slugName },
+    props: {
+      product,
+      sameCategory: allProducts.slice(0, 5),
+      latestProducts: allProducts,
+    },
+  }));
+}
+
+const { product, sameCategory, latestProducts } = Astro.props;
+---
+<ProductDetailView
+  product={product}
+  sameCategory={sameCategory}
+  latestProducts={latestProducts}
+/>

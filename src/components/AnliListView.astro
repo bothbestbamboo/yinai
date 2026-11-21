@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from './Sidebar.astro';
+import Pagination from './Pagination.astro';
+import { getAnliUrl, type AnliEntry } from '../utils/content';
+
+interface Props {
+  items: AnliEntry[];
+  currentPage: number;
+  totalPages: number;
+}
+const { items, currentPage, totalPages } = Astro.props;
+---
+<BaseLayout
+  title={currentPage > 1 ? `工程案例 第${currentPage}页 | 宜耐地板` : '工程案例 | 地板安装 | 户外地板应用 | 板材使用'}
+  keywords="宜耐, 地板, 户外地板, 竹板材, 安装, 应用"
+  description="宜耐竹地板、重竹地板及户外高耐重竹地板全国酒店、公园、住宅工程安装案例展示。"
+  activeNav="anli"
+>
+  <div class="zhaoshang-banner" style="background-image:url(/images/pro-bannner-bg.jpg);"></div>
+
+  <div class="w">
+    <div class="posi">
+      当前位置：<a href="/">首页</a> - <a href="/anli/">工程案例</a>
+    </div>
+  </div>
+
+  <div class="w sub-layout">
+    <Sidebar />
+
+    <section class="list-5">
+      <ul>
+        {items.map((item) => (
+          <li
+            data-modal="true"
+            data-img={item.data.cover || '/images/logo.png'}
+            data-title={item.data.title}
+            data-desc={item.data.summary || item.data.description}
+            data-href={getAnliUrl(item)}
+          >
+            <a class="pr" href={getAnliUrl(item)} title={item.data.title}>
+              <img width="309" height="278" src={item.data.cover || '/images/logo.png'} alt={item.data.title} loading="lazy" />
+              <p class="f16 tc">{item.data.title}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <Pagination basePath="/anli" currentPage={currentPage} totalPages={totalPages} />
+    </section>
+  </div>
+
+  <div class="zhezhaoceng" role="dialog" aria-modal="true" aria-label="案例预览">
+    <div class="li-cont">
+      <img src="" alt="案例大图" />
+      <h5 class="tc f16 b" style="margin:10px 0 6px;"><a href="#"></a></h5>
+      <p style="line-height:1.7;font-size:14px;"><a class="c6" href="#"></a></p>
+      <span class="shut" aria-label="关闭弹窗"></span>
+    </div>
+  </div>
+</BaseLayout>

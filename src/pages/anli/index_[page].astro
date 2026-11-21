@@ -1,0 +1,25 @@
+---
+import AnliListView from '../../components/AnliListView.astro';
+import { getAllAnli } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const PAGE_SIZE = 24;
+  const list = await getAllAnli();
+  const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  const paths = [];
+  for (let p = 2; p <= totalPages; p++) {
+    paths.push({
+      params: { page: String(p) },
+      props: {
+        items: list.slice((p - 1) * PAGE_SIZE, p * PAGE_SIZE),
+        currentPage: p,
+        totalPages,
+      },
+    });
+  }
+  return paths;
+}
+
+const { items, currentPage, totalPages } = Astro.props;
+---
+<AnliListView items={items} currentPage={currentPage} totalPages={totalPages} />

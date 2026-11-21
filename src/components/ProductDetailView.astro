@@ -1,0 +1,184 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { PRODUCT_SERIES } from '../data/site';
+import { getProductUrl, type ProductEntry } from '../utils/content';
+
+interface Props {
+  product: ProductEntry;
+  sameCategory: ProductEntry[];
+  latestProducts: ProductEntry[];
+  prevProduct?: ProductEntry;
+  nextProduct?: ProductEntry;
+}
+
+const { product, sameCategory, latestProducts, prevProduct, nextProduct } = Astro.props;
+const { Content } = await render(product);
+
+const gallery = product.data.gallery.length > 0
+  ? product.data.gallery
+  : [product.data.cover || '/images/logo.png'];
+
+const seriesInfo = PRODUCT_SERIES.find((s) => s.key === product.data.category);
+const rightSeries = PRODUCT_SERIES.slice(0, 4);
+const related = sameCategory.filter((p) => p.data.slugName !== product.data.slugName).slice(0, 5);
+const backListHref = seriesInfo ? seriesInfo.href : '/product/';
+---
+<BaseLayout
+  title={product.data.title}
+  keywords={product.data.keywords}
+  description={product.data.description}
+  activeNav="product"
+>
+  <div class="zhaoshang-banner" style="background-image:url(/images/chanpin-banner-bg.jpg);"></div>
+
+  <div class="w">
+    <div class="posi">
+      当前位置：<a href="/">首页</a> - <a href="/product/">宜耐产品</a>
+      {seriesInfo && (
+        <> - <a href={seriesInfo.href}>{seriesInfo.name}</a></>
+      )}
+    </div>
+  </div>
+
+  <div class="deta-three w3">
+    <div id="slideBox-2" class="slideBox-2">
+      <div class="bd">
+        <ul>
+          {gallery.map((img, i) => (
+            <li class={i === 0 ? 'is-active' : ''}>
+              <img src={img} alt={`${product.data.title} 图${i + 1}`} />
+            </li>
+          ))}
+        </ul>
+      </div>
+      {gallery.length > 1 && (
+        <>
+          <div class="hd">
+            <ul>
+              {gallery.map((img, i) => (
+                <li class={i === 0 ? 'on' : ''}>
+                  <img src={img} alt={`${product.data.title} 缩略图${i + 1}`} />
+                </li>
+              ))}
+            </ul>
+          </div>
+          <a class="prev" href="javascript:void(0)" aria-label="上一张"></a>
+          <a class="next" href="javascript:void(0)" aria-label="下一张"></a>
+        </>
+      )}
+    </div>
+
+    <div class="deta-mid">
+      <h1 class="n" style="line-height:40px;font-size:22px;margin-bottom:4px;">{product.data.title}</h1>
+      {product.data.tagline && (
+        <p><span class="cg">{product.data.tagline}</span></p>
+      )}
+      <ul class="c6">
+        {product.data.model && <li>型号：{product.data.model}</li>}
+        {product.data.specs.paint && <li>油漆：{product.data.specs.paint}</li>}
+        {product.data.specs.colorText && <li>颜色：{product.data.specs.colorText}</li>}
+        {product.data.specs.surface && <li>表面工艺：{product.data.specs.surface}</li>}
+        {product.data.specs.eco && <li>环保等级：{product.data.specs.eco}</li>}
+        {product.data.specs.size && <li>单片规格：{product.data.specs.size}</li>}
+      </ul>
+    </div>
+
+    <div class="list-4">
+      <div class="ch-com-top-2">
+        <span>宜耐产品：<b class="cg">核心系列</b></span>
+      </div>
+      <ul>
+        {rightSeries.map((s) => (
+          <li>
+            <a class="pr" href={s.href}>
+              <img width="142" height="215" src={s.cardImg} alt={s.name} loading="lazy" />
+              <p class="f16">{s.name}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  {related.length > 0 && (
+    <div class="w3" style="padding-bottom: 35px;">
+      <div class="border">
+        <div class="ch-com-top-2">
+          <span>商品推荐：<b class="cg">{product.data.categoryName}</b></span>
+        </div>
+        <div class="com-left-tj-2">
+          <ul>
+            {related.map((item) => (
+              <li>
+                <a href={getProductUrl(item)}>
+                  <img width="171" height="160" src={item.data.cover || '/images/logo.png'} alt={item.data.title} loading="lazy" />
+                  <p class="c6">
+                    {item.data.title}
+                    {item.data.tagline && (
+                      <>
+                        <br />
+                        <span>{item.data.tagline}</span>
+                      </>
+                    )}
+                  </p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  )}
+
+  <div class="w3 sub-layout">
+    <aside class="com-left">
+      <div class="com-left-tj border">
+        <div>最新产品</div>
+        <ul>
+          {latestProducts.slice(0, 4).map((item) => (
+            <li>
+              <a href={getProductUrl(item)}>
+                <img width="171" height="160" src={item.data.cover || '/images/logo.png'} alt={item.data.title} loading="lazy" />
+                <p class="c6">
+                  {item.data.title}
+                  {item.data.tagline && (
+                    <>
+                      <br />
+                      <span>{item.data.tagline}</span>
+                    </>
+                  )}
+                </p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
+
+    <article class="pro-deta">
+      <img src="/images/deta-1.jpg" alt="商品详情" />
+      <div class="pro-deta-cont">
+        <Content />
+      </div>
+      <div class="pian-2 f14">
+        <p class="c0">
+          <span class="cr">上一篇：</span>
+          {prevProduct ? (
+            <a href={getProductUrl(prevProduct)}>{prevProduct.data.title}</a>
+          ) : (
+            <a href={backListHref}>返回列表</a>
+          )}
+        </p>
+        <p class="c0">
+          <span class="cr">下一篇：</span>
+          {nextProduct ? (
+            <a href={getProductUrl(nextProduct)}>{nextProduct.data.title}</a>
+          ) : (
+            <a href={backListHref}>返回列表</a>
+          )}
+        </p>
+      </div>
+    </article>
+  </div>
+</BaseLayout>

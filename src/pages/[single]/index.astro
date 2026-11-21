@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import singlePagesData from '../../data/singlePages.json';
+
+interface SinglePageRecord {
+  title: string;
+  keywords: string;
+  description: string;
+  bodyHtml: string;
+}
+
+interface PageMeta {
+  group: 'about' | 'jiameng' | 'product';
+  label: string;
+  parentLabel: string;
+  parentHref: string;
+  banner: string;
+}
+
+const ABOUT_TABS = [
+  { key: 'about', href: '/about/', icon: '/images/g1.png', label: '公司概况' },
+  { key: 'nianzhi', href: '/nianzhi/', icon: '/images/g2.png', label: '公司年志' },
+  { key: 'rongyu', href: '/rongyu/', icon: '/images/g3.png', label: '公司荣誉' },
+];
+
+const JIAMENG_TABS = [
+  { key: 'jiameng', href: '/jiameng/', icon: '/images/six-1.png', label: '加盟前景' },
+  { key: 'youshi', href: '/youshi/', icon: '/images/six-2.png', label: '加盟优势' },
+  { key: 'zhichi', href: '/zhichi/', icon: '/images/six-3.png', label: '加盟支持' },
+  { key: 'tiaojian', href: '/tiaojian/', icon: '/images/six-4.png', label: '加盟条件' },
+  { key: 'zhongduan', href: '/zhongduan/', icon: '/images/six-5.png', label: '终端形象' },
+  { key: 'shenqing', href: '/shenqing/', icon: '/images/six-6.png', label: '加盟申请' },
+];
+
+export async function getStaticPaths() {
+  const PAGE_META: Record<string, PageMeta> = {
+    about: { group: 'about', label: '公司概况', parentLabel: '关于宜耐', parentHref: '/about/', banner: '/images/gy.jpg' },
+    nianzhi: { group: 'about', label: '公司年志', parentLabel: '关于宜耐', parentHref: '/about/', banner: '/images/gy.jpg' },
+    rongyu: { group: 'about', label: '公司荣誉', parentLabel: '关于宜耐', parentHref: '/about/', banner: '/images/gy.jpg' },
+    jiameng: { group: 'jiameng', label: '加盟前景', parentLabel: '招商加盟', parentHref: '/jiameng/', banner: '/images/zhaoshang-banner-bg.jpg' },
+    youshi: { group: 'jiameng', label: '加盟优势', parentLabel: '招商加盟', parentHref: '/jiameng/', banner: '/images/zhaoshang-banner-bg.jpg' },
+    zhichi: { group: 'jiameng', label: '加盟支持', parentLabel: '招商加盟', parentHref: '/jiameng/', banner: '/images/zhaoshang-banner-bg.jpg' },
+    tiaojian: { group: 'jiameng', label: '加盟条件', parentLabel: '招商加盟', parentHref: '/jiameng/', banner: '/images/zhaoshang-banner-bg.jpg' },
+    zhongduan: { group: 'jiameng', label: '终端形象', parentLabel: '招商加盟', parentHref: '/jiameng/', banner: '/images/zhaoshang-banner-bg.jpg' },
+    chanpinyoushi: { group: 'product', label: '产品优势', parentLabel: '宜耐产品', parentHref: '/product/', banner: '/images/chanpin-banner-bg.jpg' },
+  };
+
+  const pages = singlePagesData as Record<string, SinglePageRecord>;
+  return Object.keys(PAGE_META)
+    .filter((key) => Boolean(pages[key]))
+    .map((key) => ({
+      params: { single: key },
+      props: {
+        pageKey: key,
+        meta: PAGE_META[key],
+        content: pages[key],
+      },
+    }));
+}
+
+const { pageKey, meta, content } = Astro.props;
+const tabs = meta.group === 'about' ? ABOUT_TABS : meta.group === 'jiameng' ? JIAMENG_TABS : [];
+---
+<BaseLayout
+  title={content.title}
+  keywords={content.keywords}
+  description={content.description}
+  activeNav={meta.group}
+>
+  <div class="zhaoshang-banner" style={`background-image:url(${meta.banner});`}></div>
+
+  <div class="w">
+    <div class="posi">
+      当前位置：<a href="/">首页</a> - <a href={meta.parentHref}>{meta.parentLabel}</a> - <span>{meta.label}</span>
+    </div>
+  </div>
+
+  <div class="w">
+    {tabs.length > 0 && (
+      <div class="zs-six-2">
+        <ul>
+          {tabs.map((tab) => (
+            <li class={tab.key === pageKey ? 'now' : ''}>
+              <a href={tab.href}>
+                <div><img src={tab.icon} alt={tab.label} /></div>
+                <p class="f14">{tab.label}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <article class="zs-body f14 c0" set:html={content.bodyHtml} />
+  </div>
+</BaseLayout>

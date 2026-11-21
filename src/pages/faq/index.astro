@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import { getAllFaq, getFaqUrl, formatYearMonth } from '../../utils/content';
+
+const faqs = await getAllFaq();
+---
+<BaseLayout
+  title="常见问题 | 竹地板使用与保养解答 | 宜耐地板"
+  keywords="竹地板常见问题, 竹地板地暖, 竹地板北方, 竹地板生虫, 竹地板变形"
+  description="宜耐地板为您专业解答竹地板在北方使用、地暖适配、防虫防潮及防变形等常见问题。"
+  activeNav="news"
+>
+  <div class="zhaoshang-banner" style="background-image:url(/images/news-banner.jpg);"></div>
+
+  <div class="w">
+    <div class="posi">
+      当前位置：<a href="/">首页</a> - <a href="/faq/">常见问题</a>
+    </div>
+  </div>
+
+  <div class="w sub-layout">
+    <Sidebar />
+
+    <section class="news-list">
+      <ul>
+        {faqs.map((item) => (
+          <li>
+            {item.data.cover && (
+              <a href={getFaqUrl(item)}>
+                <img class="news-list-img" src={item.data.cover} alt={item.data.title} loading="lazy" />
+              </a>
+            )}
+            <div class="news-list-body">
+              <h3 class="n f18">
+                <a href={getFaqUrl(item)}>{item.data.title}</a>
+              </h3>
+              <p>{item.data.excerpt || item.data.description}</p>
+              <a class="news-more cf" href={getFaqUrl(item)}>》查看详情</a>
+            </div>
+            <div class="news-list-date">
+              <p class="b tc">{formatYearMonth(item.data.pubDate)}</p>
+              <img src="/images/shijian.jpg" alt="" />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

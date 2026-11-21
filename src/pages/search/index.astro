@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="站内搜索 | 宜耐地板"
+  description="搜索宜耐地板全站产品、型号、新闻动态、工程案例及常见问题。"
+>
+  <div class="zhaoshang-banner" style="background-image:url(/images/chanpin-banner-bg.jpg);"></div>
+
+  <div class="w">
+    <div class="posi">
+      当前位置：<a href="/">首页</a> - <b>站内搜索</b>
+    </div>
+
+    <form class="search-page-bar" id="searchPageForm">
+      <input type="text" id="searchInput" name="q" placeholder="输入关键词，例如：重竹、石塑、15mm、地暖、E61036..." />
+      <button type="submit">搜一搜</button>
+    </form>
+
+    <div class="search-tabs" id="searchTabs">
+      <button type="button" class="search-tab on" data-type="all">全部</button>
+      <button type="button" class="search-tab" data-type="product">宜耐产品</button>
+      <button type="button" class="search-tab" data-type="news">宜耐新闻</button>
+      <button type="button" class="search-tab" data-type="anli">工程案例</button>
+      <button type="button" class="search-tab" data-type="faq">常见问题</button>
+    </div>
+
+    <p class="search-meta" id="searchMeta">请输入关键词开始搜索。</p>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (async function () {
+    const form = document.getElementById('searchPageForm');
+    const input = document.getElementById('searchInput');
+    const tabs = document.getElementById('searchTabs');
+    const meta = document.getElementById('searchMeta');
+    const resultsEl = document.getElementById('searchResults');
+
+    let indexData = [];
+    let currentType = 'all';
+
+    function esc(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function highlight(text, terms) {
+      let out = esc(text);
+      terms.forEach((t) => {
+        if (!t) return;
+        const safe = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        out = out.replace(new RegExp(safe, 'gi'), (m) => `<mark>${m}</mark>`);
+      });
+      return out;
+    }
+
+    function runSearch(keyword) {
+      const q = (keyword || '').trim();
+      if (!q) {
+        meta.textContent = '请输入关键词（如：重竹、石塑、户外、地暖、型号编号等）进行搜索。';
+        resultsEl.innerHTML = '';
+        return;
+      }
+
+      const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+      const matched = indexData.filter((item) => {
+        if (currentType !== 'all' && item.type !== currentType) return false;
+        const hay = (item.text || '').toLowerCase();
+        return terms.every((t) => hay.includes(t));
+      });
+
+      meta.innerHTML = `关键词 “<strong>${esc(q)}</strong>” 共找到 <strong class="cr">${matched.length}</strong> 条结果`;
+
+      if (matched.length === 0) {
+        resultsEl.innerHTML = '<div class="empty-tip">未找到相关内容，请尝试更简短的关键词（如“竹地板”、“石塑”、“户外”）。</div>';
+        return;
+      }
+
+      resultsEl.innerHTML = matched
+        .map(
+          (item) => `
+          <div class="search-item">
+            ${item.cover ? `<a href="${esc(item.url)}"><img src="${esc(item.cover)}" alt="${esc(item.title)}" loading="lazy" /></a>` : ''}
+            <div class="search-item-body">
+              <h3>
+                <span class="search-badge">${esc(item.typeLabel)}</span>
+                <a href="${esc(item.url)}">${highlight(item.title, terms)}</a>
+              </h3>
+              <p>${highlight((item.subtitle || '').slice(0, 120), terms)}</p>
+            </div>
+          </div>`
+        )
+        .join('');
+    }
+
+    try {
+      const res = await fetch('/search-index.json');
+      indexData = await res.json();
+    } catch {
+      meta.textContent = '搜索索引加载失败，请刷新页面重试。';
+      return;
+    }
+
+    const params = new URLSearchParams(location.search);
+    const initQ = params.get('q') || '';
+    if (initQ) {
+      input.value = initQ;
+      runSearch(initQ);
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const q = input.value.trim();
+      const nextUrl = q ? `${location.pathname}?q=${encodeURIComponent(q)}` : location.pathname;
+      window.history.replaceState(null, '', nextUrl);
+      runSearch(q);
+    });
+
+    tabs.addEventListener('click', (e) => {
+      const btn = e.target.closest('.search-tab');
+      if (!btn) return;
+      currentType = btn.dataset.type || 'all';
+      tabs.querySelectorAll('.search-tab').forEach((b) => b.classList.toggle('on', b === btn));
+      runSearch(input.value);
+    });
+  })();
+</script>

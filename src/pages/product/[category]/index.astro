@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProductCenter from '../../../components/ProductCenter.astro';
+import { PRODUCT_SERIES } from '../../../data/site';
+import { getAllProducts } from '../../../utils/content';
+
+export async function getStaticPaths() {
+  const PAGE_SIZE = 15;
+  const allProducts = await getAllProducts();
+
+  return PRODUCT_SERIES.map((series) => {
+    const scopeProducts = allProducts.filter((p) => p.data.category === series.key);
+    const totalPages = Math.max(1, Math.ceil(scopeProducts.length / PAGE_SIZE));
+    return {
+      params: { category: series.key },
+      props: {
+        series,
+        scopeProducts,
+        pageProducts: scopeProducts.slice(0, PAGE_SIZE),
+        allProducts,
+        totalPages,
+      },
+    };
+  });
+}
+
+const { series, scopeProducts, pageProducts, allProducts, totalPages } = Astro.props;
+---
+<BaseLayout
+  title={`${series.name} - ${series.tabName} | 宜耐地板`}
+  keywords={`宜耐地板, ${series.name}, ${series.tabName}`}
+  description={`宜耐地板${series.name}（${series.tabName}）产品展示与参数筛选。`}
+  activeNav="product"
+>
+  <ProductCenter
+    titleHeading={series.name}
+    breadcrumbCategory={{ name: series.name, href: series.href }}
+    pageProducts={pageProducts}
+    scopeProducts={scopeProducts}
+    allProducts={allProducts}
+    basePath={`/product/${series.key}`}
+    currentPage={1}
+    totalPages={totalPages}
+  />
+</BaseLayout>

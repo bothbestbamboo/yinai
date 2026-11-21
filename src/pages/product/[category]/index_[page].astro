@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProductCenter from '../../../components/ProductCenter.astro';
+import { PRODUCT_SERIES } from '../../../data/site';
+import { getAllProducts } from '../../../utils/content';
+
+export async function getStaticPaths() {
+  const PAGE_SIZE = 15;
+  const allProducts = await getAllProducts();
+  const paths = [];
+
+  for (const series of PRODUCT_SERIES) {
+    const scopeProducts = allProducts.filter((p) => p.data.category === series.key);
+    const totalPages = Math.max(1, Math.ceil(scopeProducts.length / PAGE_SIZE));
+    for (let p = 2; p <= totalPages; p++) {
+      paths.push({
+        params: { category: series.key, page: String(p) },
+        props: {
+          series,
+          scopeProducts,
+          pageProducts: scopeProducts.slice((p - 1) * PAGE_SIZE, p * PAGE_SIZE),
+          allProducts,
+          currentPage: p,
+          totalPages,
+        },
+      });
+    }
+  }
+  return paths;
+}
+
+const { series, scopeProducts, pageProducts, allProducts, currentPage, totalPages } = Astro.props;
+---
+<BaseLayout
+  title={`${series.name} 第${currentPage}页 | 宜耐地板`}
+  activeNav="product"
+>
+  <ProductCenter
+    titleHeading={series.name}
+    breadcrumbCategory={{ name: series.name, href: series.href }}
+    pageProducts={pageProducts}
+    scopeProducts={scopeProducts}
+    allProducts={allProducts}
+    basePath={`/product/${series.key}`}
+    currentPage={currentPage}
+    totalPages={totalPages}
+  />
+</BaseLayout>

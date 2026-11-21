@@ -1,0 +1,61 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import { getAllFaq, getFaqUrl } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const list = await getAllFaq();
+  return list.map((entry, idx) => ({
+    params: { slug: entry.data.slugName },
+    props: {
+      entry,
+      prevItem: idx < list.length - 1 ? list[idx + 1] : undefined,
+      nextItem: idx > 0 ? list[idx - 1] : undefined,
+    },
+  }));
+}
+
+const { entry, prevItem, nextItem } = Astro.props;
+const { Content } = await render(entry);
+---
+<BaseLayout
+  title={entry.data.title}
+  keywords={entry.data.keywords}
+  description={entry.data.description}
+  activeNav="news"
+>
+  <div class="zhaoshang-banner" style="background-image:url(/images/news-banner.jpg);"></div>
+
+  <div class="w">
+    <div class="posi">
+      当前位置：<a href="/">首页</a> - <a href="/faq/">常见问题</a>
+    </div>
+  </div>
+
+  <div class="w sub-layout">
+    <Sidebar />
+
+    <article class="news-deta">
+      <div class="news-deta-cont">
+        <h1 class="tc c6" style="line-height:1.5;padding:14px 0 8px;font-size:26px;">{entry.data.title}</h1>
+        {entry.data.pubDate && (
+          <p class="news-deta-p tc f14 cg">发布日期：{entry.data.pubDate}</p>
+        )}
+        <div class="news-deta-body">
+          <Content />
+        </div>
+      </div>
+      <div class="pian f14">
+        <p class="cr">
+          <span>上一篇：</span>
+          {prevItem ? <a href={getFaqUrl(prevItem)}>{prevItem.data.title}</a> : <a href="/faq/">返回列表</a>}
+        </p>
+        <p class="cr">
+          <span>下一篇：</span>
+          {nextItem ? <a href={getFaqUrl(nextItem)}>{nextItem.data.title}</a> : <a href="/faq/">返回列表</a>}
+        </p>
+      </div>
+    </article>
+  </div>
+</BaseLayout>

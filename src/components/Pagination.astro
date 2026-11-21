@@ -1,0 +1,29 @@
+---
+interface Props {
+  basePath: string; // 例如 /product、/product/naiyong、/news、/anli
+  currentPage: number;
+  totalPages: number;
+}
+const { basePath, currentPage, totalPages } = Astro.props;
+
+function pageUrl(p: number): string {
+  return p <= 1 ? `${basePath}/` : `${basePath}/index_${p}.html`;
+}
+
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+---
+{totalPages > 1 && (
+  <p class="pages" aria-label="分页导航">
+    {currentPage > 1 && <a href={pageUrl(1)}>首页</a>}
+    {currentPage > 1 && <a href={pageUrl(currentPage - 1)}>上一页</a>}
+    {pages.map((p) =>
+      p === currentPage ? (
+        <span class="page-current">{p}</span>
+      ) : (
+        <a href={pageUrl(p)}>{p}</a>
+      )
+    )}
+    {currentPage < totalPages && <a href={pageUrl(currentPage + 1)}>下一页</a>}
+    {currentPage < totalPages && <a href={pageUrl(totalPages)}>尾页</a>}
+  </p>
+)}

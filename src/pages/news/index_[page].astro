@@ -1,0 +1,25 @@
+---
+import NewsListView from '../../components/NewsListView.astro';
+import { getMainNews } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const PAGE_SIZE = 25;
+  const news = await getMainNews();
+  const totalPages = Math.max(1, Math.ceil(news.length / PAGE_SIZE));
+  const paths = [];
+  for (let p = 2; p <= totalPages; p++) {
+    paths.push({
+      params: { page: String(p) },
+      props: {
+        items: news.slice((p - 1) * PAGE_SIZE, p * PAGE_SIZE),
+        currentPage: p,
+        totalPages,
+      },
+    });
+  }
+  return paths;
+}
+
+const { items, currentPage, totalPages } = Astro.props;
+---
+<NewsListView items={items} currentPage={currentPage} totalPages={totalPages} />

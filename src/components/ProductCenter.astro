@@ -1,0 +1,276 @@
+---
+import { PRODUCT_SERIES, FILTER_GROUPS } from '../data/site';
+import Pagination from './Pagination.astro';
+import { getProductUrl, pickFeaturedProducts, type ProductEntry } from '../utils/content';
+
+interface Props {
+  titleHeading: string;
+  breadcrumbCategory?: { name: string; href: string };
+  pageProducts: ProductEntry[];   // 当前页展示的产品
+  scopeProducts: ProductEntry[];  // 当前范围全部产品（用于前端无刷新筛选）
+  allProducts: ProductEntry[];    // 全站产品（用于左侧推荐）
+  basePath: string;
+  currentPage: number;
+  totalPages: number;
+}
+
+const {
+  titleHeading,
+  breadcrumbCategory,
+  pageProducts,
+  scopeProducts,
+  allProducts,
+  basePath,
+  currentPage,
+  totalPages,
+} = Astro.props;
+
+const featuredProducts = pickFeaturedProducts(allProducts, 6);
+
+const clientProducts = allProducts.map((p) => ({
+  title: p.data.title,
+  model: p.data.model,
+  tagline: p.data.tagline,
+  cover: p.data.cover || '/images/logo.png',
+  url: getProductUrl(p),
+  filters: p.data.filters,
+}));
+
+const serializedProducts = JSON.stringify(clientProducts).replace(/</g, '\\u003c');
+---
+<div class="zhaoshang-banner" style="background-image:url(/images/chanpin-banner-bg.jpg);"></div>
+
+<div class="w">
+  <div class="posi">
+    {breadcrumbCategory ? (
+      <>
+        当前位置：<a href="/">首页</a> - <a href="/product/">宜耐产品</a> - <b class="f16">{breadcrumbCategory.name}</b>
+      </>
+    ) : (
+      <b class="f18">{titleHeading}</b>
+    )}
+  </div>
+
+  <div class="chanpin-two">
+    <div>
+      <div class="ch-com-top">
+        <span>产品分类：<b class="cg">五大系列</b></span>
+      </div>
+      <ul class="series-cards-grid">
+        {PRODUCT_SERIES.map((series) => (
+          <li>
+            <a class="pr" href={series.href}>
+              <img width="142" height="215" src={series.cardImg} alt={series.name} />
+              <p>{series.name}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="filter-panel" id="productFilterPanel">
+      <div class="ch-com-top">
+        <span>宜耐产品：<b class="cg">商品筛选</b></span>
+        <button type="button" class="filter-reset-btn" id="filterResetTop" style="display:none;">清除全部条件 ×</button>
+      </div>
+      <ul>
+        {FILTER_GROUPS.map((group) => (
+          <li>
+            <dt>
+              <em><img src={group.icon} alt="" /></em>
+              <span class="c6">{group.label}：</span>
+            </dt>
+            <div class="filter-options">
+              {group.options.map((opt) => (
+                <button
+                  type="button"
+                  class="filter-btn"
+                  data-filter-key={group.key}
+                  data-filter-val={opt}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="w sub-layout">
+  <aside class="com-left">
+    <div class="com-left-tj border">
+      <div>商品推荐</div>
+      <ul>
+        {featuredProducts.map((p) => (
+          <li>
+            <a href={getProductUrl(p)}>
+              <img width="171" height="160" src={p.data.cover || '/images/logo.png'} alt={p.data.title} loading="lazy" />
+              <p class="c6">
+                {p.data.title}
+                {p.data.tagline && (
+                  <>
+                    <br />
+                    <span>{p.data.tagline}</span>
+                  </>
+                )}
+              </p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </aside>
+
+  <section class="pro-list">
+    <div class="filter-status-bar" id="filterStatusBar">
+      <span id="filterSummaryText"></span>
+      <button type="button" class="filter-reset-btn" id="filterResetBar">重置筛选</button>
+    </div>
+
+    <ul id="productGrid">
+      {pageProducts.map((p) => (
+        <li>
+          <a href={getProductUrl(p)}>
+            <img width="309" height="309" src={p.data.cover || '/images/logo.png'} alt={p.data.title} loading="lazy" />
+            <p class="c6">
+              {p.data.title} {p.data.model && <s class="cr">{p.data.model}</s>}
+              {p.data.tagline && (
+                <>
+                  <br />
+                  <span class="f12">{p.data.tagline}</span>
+                </>
+              )}
+            </p>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div id="productPagination">
+      <Pagination basePath={basePath} currentPage={currentPage} totalPages={totalPages} />
+    </div>
+  </section>
+</div>
+
+<script type="application/json" id="scope-products-data" set:html={serializedProducts}></script>
+
+<script is:inline>
+  (function () {
+    const dataEl = document.getElementById('scope-products-data');
+    const panel = document.getElementById('productFilterPanel');
+    const grid = document.getElementById('productGrid');
+    const pagination = document.getElementById('productPagination');
+    const statusBar = document.getElementById('filterStatusBar');
+    const summaryText = document.getElementById('filterSummaryText');
+    const resetTop = document.getElementById('filterResetTop');
+    const resetBar = document.getElementById('filterResetBar');
+
+    if (!dataEl || !panel || !grid) return;
+
+    const allItems = JSON.parse(dataEl.textContent || '[]');
+    const initialHtml = grid.innerHTML;
+    const activeFilters = {};
+
+    const labels = { hd: '厚度', yt: '用途', fg: '风格', gy: '工艺', ys: '颜色', wl: '纹理' };
+
+    function esc(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function applyFilters(syncUrl = true) {
+      const keys = Object.keys(activeFilters);
+
+      panel.querySelectorAll('.filter-btn').forEach((btn) => {
+        const k = btn.dataset.filterKey;
+        const v = btn.dataset.filterVal;
+        btn.classList.toggle('on', activeFilters[k] === v);
+      });
+
+      if (syncUrl && window.history.replaceState) {
+        const params = new URLSearchParams();
+        keys.forEach((k) => params.set(k, activeFilters[k]));
+        const qs = params.toString();
+        const nextUrl = qs ? `${location.pathname}?${qs}` : location.pathname;
+        window.history.replaceState(null, '', nextUrl);
+      }
+
+      if (keys.length === 0) {
+        grid.innerHTML = initialHtml;
+        if (pagination) pagination.style.display = '';
+        if (statusBar) statusBar.classList.remove('is-visible');
+        if (resetTop) resetTop.style.display = 'none';
+        return;
+      }
+
+      const matched = allItems.filter((item) =>
+        keys.every((k) => item.filters && item.filters[k] === activeFilters[k])
+      );
+
+      if (pagination) pagination.style.display = 'none';
+      if (statusBar) statusBar.classList.add('is-visible');
+      if (resetTop) resetTop.style.display = 'inline-block';
+
+      const desc = keys.map((k) => `${labels[k]}：${activeFilters[k]}`).join(' + ');
+      if (summaryText) {
+  summaryText.innerHTML = `全站产品筛选 · 当前条件：<strong>${esc(desc)}</strong>，共找到 <strong class="cr">${matched.length}</strong> 款产品`;
+}
+
+      if (matched.length === 0) {
+        grid.innerHTML = '<li style="grid-column:1/-1;"><div class="empty-tip">暂无同时满足上述条件的产品，请尝试减少筛选条件或点击“重置筛选”。</div></li>';
+        return;
+      }
+
+      grid.innerHTML = matched
+        .map(
+          (p) => `
+          <li>
+            <a href="${esc(p.url)}">
+              <img width="309" height="309" src="${esc(p.cover)}" alt="${esc(p.title)}" loading="lazy" />
+              <p class="c6">
+                ${esc(p.title)} ${p.model ? `<s class="cr">${esc(p.model)}</s>` : ''}
+                ${p.tagline ? `<br /><span class="f12">${esc(p.tagline)}</span>` : ''}
+              </p>
+            </a>
+          </li>`
+        )
+        .join('');
+    }
+
+    panel.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      const k = btn.dataset.filterKey;
+      const v = btn.dataset.filterVal;
+      if (activeFilters[k] === v) {
+        delete activeFilters[k];
+      } else {
+        activeFilters[k] = v;
+      }
+      applyFilters(true);
+    });
+
+    function clearAll() {
+      Object.keys(activeFilters).forEach((k) => delete activeFilters[k]);
+      applyFilters(true);
+    }
+    resetTop?.addEventListener('click', clearAll);
+    resetBar?.addEventListener('click', clearAll);
+
+    // 支持带筛选参数的 URL 直达（如 /product/index.html?hd=15mm&yt=室内）
+    const initParams = new URLSearchParams(location.search);
+    Object.keys(labels).forEach((k) => {
+      const v = initParams.get(k);
+      if (v) activeFilters[k] = v;
+    });
+    if (Object.keys(activeFilters).length > 0) {
+      applyFilters(false);
+    }
+  })();
+</script>

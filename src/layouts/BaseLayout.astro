@@ -1,0 +1,39 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../data/site';
+
+interface Props {
+  title?: string;
+  keywords?: string;
+  description?: string;
+  activeNav?: 'home' | 'about' | 'product' | 'news' | 'jiameng' | 'anli' | '';
+}
+
+const {
+  title = SITE.title,
+  keywords = '竹地板, 石塑地板, SPC, 宜耐, 重竹地板, 户外竹地板, 家具板材',
+  description = '宜耐地板是竹地板和SPC石塑地板行业领跑者，专业的生产厂家，进口设备生产，出口欧美。',
+  activeNav = '',
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+  <title>{title}</title>
+  {keywords && <meta name="keywords" content={keywords} />}
+  {description && <meta name="description" content={description} />}
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+  <Header activeNav={activeNav} />
+  <main>
+    <slot />
+  </main>
+  <Footer />
+  <script src="/js/site.js" defer></script>
+</body>
+</html>

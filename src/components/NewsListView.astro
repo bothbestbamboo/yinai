@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from './Sidebar.astro';
+import Pagination from './Pagination.astro';
+import { getNewsUrl, formatYearMonth, type NewsEntry } from '../utils/content';
+
+interface Props {
+  items: NewsEntry[];
+  currentPage: number;
+  totalPages: number;
+}
+const { items, currentPage, totalPages } = Astro.props;
+---
+<BaseLayout
+  title={currentPage > 1 ? `宜耐新闻 第${currentPage}页 | 宜耐地板` : '宜耐新闻 | 公告 | 动态 | 地板行业最新发布'}
+  keywords="宜耐, 地板, 新闻, 公告, 动态"
+  description="宜耐地板最新企业动态、行业资讯与竹木地板、SPC石塑地板选购保养指南。"
+  activeNav="news"
+>
+  <div class="zhaoshang-banner" style="background-image:url(/images/news-banner.jpg);"></div>
+
+  <div class="w">
+    <div class="posi">
+      当前位置：<a href="/">首页</a> - <a href="/news/">宜耐新闻</a>
+    </div>
+  </div>
+
+  <div class="w sub-layout">
+    <Sidebar />
+
+    <section class="news-list">
+      <ul>
+        {items.map((item) => (
+          <li>
+            {item.data.cover && (
+              <a href={getNewsUrl(item)}>
+                <img class="news-list-img" src={item.data.cover} alt={item.data.title} loading="lazy" />
+              </a>
+            )}
+            <div class="news-list-body">
+              <h3 class="n f18">
+                <a href={getNewsUrl(item)}>{item.data.title}</a>
+              </h3>
+              <p>{item.data.excerpt || item.data.description}</p>
+              <a class="news-more cf" href={getNewsUrl(item)}>》查看详情</a>
+            </div>
+            <div class="news-list-date">
+              <p class="b tc">{formatYearMonth(item.data.pubDate)}</p>
+              <img src="/images/shijian.jpg" alt="" />
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <Pagination basePath="/news" currentPage={currentPage} totalPages={totalPages} />
+    </section>
+  </div>
+</BaseLayout>

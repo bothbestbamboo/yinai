@@ -1,0 +1,235 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { PRODUCT_SERIES } from '../data/site';
+import { HOME_BANNERS, HOME_ADVANTAGES, HOME_BOTTOM_IMAGES } from '../data/home';
+import {
+  getAllProducts,
+  getMainNews,
+  getAllFaq,
+  getProductUrl,
+  getNewsUrl,
+  getFaqUrl,
+  formatShortDate,
+} from '../utils/content';
+
+const allProducts = await getAllProducts();
+const latestNews = (await getMainNews()).slice(0, 4);
+const faqs = (await getAllFaq()).slice(0, 4);
+
+const byCategory = (cat: string, limit: number) =>
+  allProducts.filter((p) => p.data.category === cat).slice(0, limit);
+
+// 首页顶部 5 大产品 Tab 顺序：石塑、普竹、重竹、户外、家具板材（1:1 还原）
+const tabSeriesOrder = ['shisu', 'naiyong', 'naimo', 'naifu', 'naijiu'] as const;
+const tabSeries = tabSeriesOrder.map((key) => PRODUCT_SERIES.find((s) => s.key === key)!);
+
+// 首页 5 大系列区块顺序：耐用、耐石、耐磨、耐腐、耐久（1:1 还原）
+const sectionSeriesOrder = ['naiyong', 'shisu', 'naimo', 'naifu', 'naijiu'] as const;
+const sectionSeries = sectionSeriesOrder.map((key) => PRODUCT_SERIES.find((s) => s.key === key)!);
+---
+<BaseLayout activeNav="home">
+  <!-- 大图轮播 -->
+  <section id="slideBox" class="slideBox pr">
+    <div class="bd">
+      <ul>
+        {HOME_BANNERS.map((b, i) => (
+          <li class={i === 0 ? 'is-active' : ''}>
+            <a href={b.href}><img src={b.img} alt={b.alt} /></a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <a class="prev" href="javascript:void(0)" aria-label="上一张"></a>
+    <a class="next" href="javascript:void(0)" aria-label="下一张"></a>
+  </section>
+
+  <!-- 5大产品 Tab 切换 -->
+  <section class="w">
+    <div class="slideTxtBox">
+      <div class="hd f18 cy">
+        <ul>
+          {tabSeries.map((s, i) => (
+            <li class={i === 0 ? 'on' : ''}>{s.tabName}</li>
+          ))}
+        </ul>
+      </div>
+      <div class="bd f14">
+        {tabSeries.map((s, i) => (
+          <div class={`bd-div ${i === 0 ? 'is-active' : ''}`}>
+            <ul>
+              {byCategory(s.key, 3).map((p) => (
+                <li>
+                  <a class="pr" href={getProductUrl(p)}>
+                    <img width="350" height="350" src={p.data.cover || '/images/logo.png'} alt={p.data.title} loading="lazy" />
+                    <div class="pa">
+                      <p class="chinese cf">{s.tabName}</p>
+                      <p class="english cf">NEW ART</p>
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5大产品系列楼层 -->
+  <div class="w">
+    {sectionSeries.map((s) => (
+      <section>
+        <div class="index-com-top">
+          <div class="series-title-box">
+            <em><img src={s.icon} alt="" /></em>
+            <h3>{s.name}</h3>
+            <span class="f14">{s.enName}</span>
+          </div>
+          <a class="more-link" href={s.href}>MORE+</a>
+        </div>
+        <div class="index-com-cont">
+          <div class="series-cover">
+            <a href={s.href}>
+              <img width="462" height="462" src={s.homeBannerImg} alt={s.name} loading="lazy" />
+              <p>{s.name}</p>
+            </a>
+          </div>
+          <ul class="series-grid">
+            {byCategory(s.key, 6).map((p) => (
+              <li>
+                <a href={getProductUrl(p)}>
+                  <img width="223" height="223" src={p.data.cover || '/images/logo.png'} alt={p.data.title} loading="lazy" />
+                  <p>{p.data.title}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    ))}
+
+    <!-- 产品优势示范（7大优势） -->
+    <section>
+      <div class="index-com-div-t">
+        <em><img src="/images/index-icon-1.png" alt="" /></em>
+        <h3>产品优势示范</h3>
+        <span class="f20 c7">Econice Product Advantages</span>
+      </div>
+      <div class="seven-two">
+        <div class="slideTxtBox-2 border">
+          <div class="hd f18 cy">
+            <ul>
+              {HOME_ADVANTAGES.map((adv, i) => (
+                <li class={i === 0 ? 'on' : ''}>{adv.tab}</li>
+              ))}
+            </ul>
+          </div>
+          <div class="bd f14">
+            {HOME_ADVANTAGES.map((adv, i) => (
+              <div class={`bd-div ${i === 0 ? 'is-active' : ''}`}>
+                <img width="220" height="273" src={adv.img} alt={adv.title} loading="lazy" />
+                <div>
+                  <h4>{adv.title}</h4>
+                  {adv.paragraphs.map((text) => (
+                    <p>{text}</p>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="seven-side">
+          <a href="/about/"><img src="/images/233-381.jpg" alt="宜耐品牌实力" loading="lazy" /></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 企业形象 + 新闻动态 -->
+    <section class="xingxiang-dongtai">
+      <div>
+        <div class="index-com-div-t">
+          <em><img src="/images/index-icon-3.png" alt="" /></em>
+          <h3>企业形象</h3>
+          <span class="f20 c7">Econice Factory</span>
+        </div>
+        <div class="xingxiang">
+          <a href="/about/"><img src="/images/gsxx.jpg" alt="宜耐企业形象" loading="lazy" /></a>
+        </div>
+      </div>
+
+      <div>
+        <div class="index-com-div-t">
+          <em><img src="/images/index-icon-4.png" alt="" /></em>
+          <h3>新闻动态</h3>
+          <span class="f20 c7">Econice News</span>
+        </div>
+        <ul class="dongtai border">
+          {latestNews.map((item) => (
+            <li>
+              <a href={getNewsUrl(item)}>
+                <img src={item.data.cover || '/images/logo.png'} width="147" height="78" alt={item.data.title} loading="lazy" />
+              </a>
+              <div class="dongtai-body">
+                <h4 class="f14">
+                  <a href={getNewsUrl(item)} title={item.data.title}>{item.data.title}</a>
+                  <span class="c7 f12">
+                    <img src="/images/index-icon-5.png" alt="" /> 时间：{formatShortDate(item.data.pubDate)}
+                  </span>
+                </h4>
+                <p>{(item.data.excerpt || item.data.description).slice(0, 46)}...</p>
+                <a class="cg" href={getNewsUrl(item)}>查看详情 &gt;&gt;</a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 常见问题 -->
+    <section class="index-question">
+      <div class="index-com-div-t">
+        <em><img src="/images/index-icon-6.png" alt="" /></em>
+        <h3>常见问题</h3>
+      </div>
+      <p class="tc">
+        竹地板一直是家装主材里默默无闻的小众产品，没有铺天盖地的广告，没有广为人知的品牌，只有大家熟悉的毛竹。<br />
+        消费者一直对竹地板心存疑惑，总是用怀疑的眼光看待这个质量非常好但没有大名气的产品。<br />
+        竹地板近年来在国外市场普遍开花和结果，广泛为国外家庭所接受并喜爱，因为他们都热爱中国、热爱中国的毛竹！
+      </p>
+    </section>
+
+    <section class="slideTxtBox-3">
+      <div class="hd">
+        <ul>
+          {faqs.map((item, i) => (
+            <li class={i === 0 ? 'on' : ''}>
+              <span>0{i + 1}</span>{item.data.title}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="bd border">
+        {faqs.map((item, i) => (
+          <div class={`bd-div ${i === 0 ? 'is-active' : ''}`}>
+            <img width="246" height="294" src={item.data.cover || '/images/logo.png'} alt={item.data.title} loading="lazy" />
+            <div>
+              <h4>{item.data.title}</h4>
+              <p class="f14">{item.data.excerpt || item.data.description}</p>
+              <a class="cg" href={getFaqUrl(item)}>查看详情 &gt;&gt;</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 底部 4 图 -->
+    <section class="two-things">
+      <p class="tc"><img src="/images/two-things.jpg" alt="宜耐地板品质承诺" loading="lazy" /></p>
+      <ul>
+        {HOME_BOTTOM_IMAGES.map((item) => (
+          <li><img width="283" height="239" src={item.img} alt={item.alt} loading="lazy" /></li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
