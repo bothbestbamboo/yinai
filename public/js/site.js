@@ -138,4 +138,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.target === modal) closeModal();
     });
   }
+
+  // 7. 顶部搜索框无参数跳转（地址栏只显示 /search/，不带 ?q=）
+  const headerSearchForm = document.querySelector('.head .search-form');
+  if (headerSearchForm) {
+    headerSearchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = headerSearchForm.querySelector('input[name="q"]');
+      const q = (input?.value || '').trim();
+      try {
+        sessionStorage.setItem('yinai_search_q', q);
+      } catch {}
+      window.location.href = '/search/';
+    });
+  }
 });

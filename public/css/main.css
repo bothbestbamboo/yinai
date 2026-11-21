@@ -1026,10 +1026,48 @@ p.pages a.on, p.pages a:hover, p.pages span.page-current {
     color: #333;
     font-size: 16px;
   }
-  .mega-menu { position: static; padding: 14px; box-shadow: none; }
+.mega-menu {
+    position: static;
+    padding: 10px 14px 14px;
+    box-shadow: none;
+    border-top: 1px solid #e5e5e5;
+    background: #fafafa;
+  }
   .nav-list > li.has-mega:hover .mega-menu { display: none; }
   .nav-list > li.has-mega.sub-open .mega-menu { display: block; }
-  .mega-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .mega-grid { grid-template-columns: 1fr; gap: 10px; }
+  .mega-col a.two { margin-bottom: 4px; }
+  .mega-col a.two img { display: none; }
+  .mega-col a.two h3 {
+    padding: 6px 10px;
+    font-size: 14px;
+    line-height: 22px;
+    background: #eef6d6;
+    color: #5b7a00;
+    border-bottom: 0;
+    border-left: 3px solid #9BC713;
+    border-radius: 2px;
+  }
+  .mega-col ol {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px 8px;
+    margin-top: 6px;
+  }
+  .mega-col ol li { margin-bottom: 0; }
+  .mega-col ol li a {
+    font-size: 13px;
+    line-height: 28px;
+    padding: 0 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .zhaoshang-banner {
+    height: 150px;
+    background-size: cover;
+    background-position: center center;
+  }
 
   .index-com-cont, .seven-two, .xingxiang-dongtai, .slideTxtBox-3, .chanpin-two, .deta-three, .sub-layout {
     grid-template-columns: 1fr;
@@ -1057,10 +1095,10 @@ p.pages a.on, p.pages a:hover, p.pages span.page-current {
 }
 
 @media (max-width: 640px) {
+  .zhaoshang-banner { height: 110px; }
   .top .fl { display: none; }
   .top-inner { justify-content: flex-end; }
   .search-form button { width: 64px; font-size: 13px; }
-  .mega-grid { grid-template-columns: 1fr; }
   .slideTxtBox .hd ul li { width: 46%; background-size: 100% 48px; line-height: 48px; padding-bottom: 14px; }
   .slideTxtBox .bd .bd-div { padding: 16px; }
   .slideTxtBox .bd ul,

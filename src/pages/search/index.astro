@@ -107,7 +107,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     }
 
     const params = new URLSearchParams(location.search);
-    const initQ = params.get('q') || '';
+    let initQ = params.get('q') || '';
+    if (initQ) {
+      try { sessionStorage.setItem('yinai_search_q', initQ); } catch {}
+      if (window.history.replaceState) {
+        window.history.replaceState(null, '', location.pathname);
+      }
+    } else {
+      try { initQ = sessionStorage.getItem('yinai_search_q') || ''; } catch {}
+    }
+
     if (initQ) {
       input.value = initQ;
       runSearch(initQ);
@@ -116,8 +125,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const q = input.value.trim();
-      const nextUrl = q ? `${location.pathname}?q=${encodeURIComponent(q)}` : location.pathname;
-      window.history.replaceState(null, '', nextUrl);
+      try { sessionStorage.setItem('yinai_search_q', q); } catch {}
       runSearch(q);
     });
 
