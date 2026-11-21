@@ -545,9 +545,12 @@ s { text-decoration: none; }
 
 /* ===== Subpage Banners & Breadcrumb ===== */
 .zhaoshang-banner {
-  height: 200px;
+  width: 100%;
+  max-width: 1920px;
+  height: clamp(220px, 17vw, 300px);
+  margin: 0 auto;
   background-repeat: no-repeat;
-  background-position: center top;
+  background-position: center center;
   background-size: cover;
 }
 .posi {
