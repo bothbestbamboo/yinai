@@ -91,6 +91,9 @@ const tabs = meta.group === 'about' ? ABOUT_TABS : meta.group === 'jiameng' ? JI
       </div>
     )}
 
-    <article class="zs-body f14 c0" set:html={content.bodyHtml} />
+    <article
+  class="zs-body f14 c0"
+  set:html={content.bodyHtml.replace(/<img(?![^>]*\bloading=)/gi, '<img loading="lazy" decoding="async"')}
+/>
   </div>
 </BaseLayout>

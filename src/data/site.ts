@@ -22,10 +22,10 @@ export const PRODUCT_SERIES = [
     homeBannerImg: '/images/nh1.jpg',
     icon: '/images/index-com-1.png',
     links: [
-      { title: '本色侧压竹地板', href: '/product/naiyong/bence.html' },
-      { title: '碳化侧压竹地板', href: '/product/naiyong/tance.html' },
-      { title: '本色平压竹地板', href: '/product/naiyong/benpin.html' },
-      { title: '碳化平压竹地板', href: '/product/naiyong/tanpin.html' },
+      { title: '本色侧压竹地板', href: '/product/naiyong/bence' },
+      { title: '碳化侧压竹地板', href: '/product/naiyong/tance' },
+      { title: '本色平压竹地板', href: '/product/naiyong/benpin' },
+      { title: '碳化平压竹地板', href: '/product/naiyong/tanpin' },
     ],
   },
   {
@@ -39,10 +39,10 @@ export const PRODUCT_SERIES = [
     homeBannerImg: '/images/ns1.jpg',
     icon: '/images/index-com-2.png',
     links: [
-      { title: '本色实心重竹地板', href: '/product/naimo/benshizhong.html' },
-      { title: '碳化实心重竹地板', href: '/product/naimo/tanshizhong.html' },
-      { title: '本色锁扣重竹地板', href: '/product/naimo/bensuo.html' },
-      { title: '碳化锁扣重竹地板', href: '/product/naimo/tansuo.html' },
+      { title: '本色实心重竹地板', href: '/product/naimo/benshizhong' },
+      { title: '碳化实心重竹地板', href: '/product/naimo/tanshizhong' },
+      { title: '本色锁扣重竹地板', href: '/product/naimo/bensuo' },
+      { title: '碳化锁扣重竹地板', href: '/product/naimo/tansuo' },
     ],
   },
   {
@@ -56,10 +56,10 @@ export const PRODUCT_SERIES = [
     homeBannerImg: '/images/33.jpg',
     icon: '/images/index-com-3.png',
     links: [
-      { title: '深碳大波浪重竹户外地板', href: '/product/naifu/stdabolang.html' },
-      { title: '中碳大波浪重竹户外地板', href: '/product/naifu/ztdabolang.html' },
-      { title: '深碳细波纹重竹户外地板', href: '/product/naifu/stxibowen.html' },
-      { title: '中碳细波纹重竹户外地板', href: '/product/naifu/ztxibowen.html' },
+      { title: '深碳大波浪重竹户外地板', href: '/product/naifu/stdabolang' },
+      { title: '中碳大波浪重竹户外地板', href: '/product/naifu/ztdabolang' },
+      { title: '深碳细波纹重竹户外地板', href: '/product/naifu/stxibowen' },
+      { title: '中碳细波纹重竹户外地板', href: '/product/naifu/ztxibowen' },
     ],
   },
   {
@@ -73,10 +73,10 @@ export const PRODUCT_SERIES = [
     homeBannerImg: '/images/44.jpg',
     icon: '/images/index-com-4.png',
     links: [
-      { title: '5mm本色平压竹表板', href: '/product/naijiu/5mmbenpin.html' },
-      { title: '10mm碳化平压竹板材', href: '/product/naijiu/10mmtanpin.html' },
-      { title: '15mm本色侧压竹板材', href: '/product/naijiu/15mmbence.html' },
-      { title: '20mm碳化侧压竹板材', href: '/product/naijiu/20mmtance.html' },
+      { title: '5mm本色平压竹表板', href: '/product/naijiu/5mmbenpin' },
+      { title: '10mm碳化平压竹板材', href: '/product/naijiu/10mmtanpin' },
+      { title: '15mm本色侧压竹板材', href: '/product/naijiu/15mmbence' },
+      { title: '20mm碳化侧压竹板材', href: '/product/naijiu/20mmtance' },
     ],
   },
   {
@@ -90,10 +90,10 @@ export const PRODUCT_SERIES = [
     homeBannerImg: '/images/spc-1.jpg',
     icon: '/images/index-com-5.png',
     links: [
-      { title: '石塑锁扣地板8mm', href: '/product/shisu/135.html' },
-      { title: '石塑锁扣地板6mm', href: '/product/shisu/134.html' },
-      { title: '石塑锁扣地板5mm', href: '/product/shisu/131.html' },
-      { title: '石塑锁扣地板4mm', href: '/product/shisu/129.html' },
+      { title: '石塑锁扣地板8mm', href: '/product/shisu/135' },
+      { title: '石塑锁扣地板6mm', href: '/product/shisu/134' },
+      { title: '石塑锁扣地板5mm', href: '/product/shisu/131' },
+      { title: '石塑锁扣地板4mm', href: '/product/shisu/129' },
     ],
   },
 ] as const;

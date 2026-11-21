@@ -7,7 +7,7 @@ interface Props {
 const { basePath, currentPage, totalPages } = Astro.props;
 
 function pageUrl(p: number): string {
-  return p <= 1 ? `${basePath}/` : `${basePath}/index_${p}.html`;
+  return p <= 1 ? `${basePath}/` : `${basePath}/index_${p}`;
 }
 
 const pages = Array.from({ length: totalPages }, (_, i) => i + 1);

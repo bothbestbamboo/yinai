@@ -7,25 +7,28 @@ export type FaqEntry = CollectionEntry<'faq'>;
 
 export function getProductUrl(item: ProductEntry): string {
   return item.data.category === 'other'
-    ? `/product/${item.data.slugName}.html`
-    : `/product/${item.data.category}/${item.data.slugName}.html`;
+    ? `/product/${item.data.slugName}`
+    : `/product/${item.data.category}/${item.data.slugName}`;
 }
 
 export function getNewsUrl(item: NewsEntry): string {
-  return `/news/${item.data.slugName}.html`;
+  return `/news/${item.data.slugName}`;
 }
 
 export function getAnliUrl(item: AnliEntry): string {
-  return `/anli/${item.data.slugName}.html`;
+  return `/anli/${item.data.slugName}`;
 }
 
 export function getFaqUrl(item: FaqEntry): string {
-  return `/faq/${item.data.slugName}.html`;
+  return `/faq/${item.data.slugName}`;
 }
 
+/** 获取全部产品：优先按 pubDate 发布日期倒序（新发布产品自动排最前），再按原站 order 排序 */
 export async function getAllProducts(): Promise<ProductEntry[]> {
   const items = await getCollection('products');
-  return items.sort((a, b) => b.data.order - a.data.order);
+  return items.sort(
+    (a, b) => b.data.pubDate.localeCompare(a.data.pubDate) || b.data.order - a.data.order
+  );
 }
 
 /** 获取全部新闻：优先按发布日期倒序，发新文章只要写最新日期就会自动排第 1 */
@@ -52,7 +55,7 @@ export async function getAllFaq(): Promise<FaqEntry[]> {
   return items.sort((a, b) => b.data.order - a.data.order);
 }
 
-/** 侧边栏“热销商品”：优先显示 Markdown 里标了 hot: true 的产品，不足 6 款用下方默认列表补齐 */
+/** 侧边栏“热销商品”：优先显示标了 hot: true 的产品，不足 6 款用默认列表补齐 */
 const HOT_SLUGS = ['tance', 'benshizhong', 'tanshizhong', 'stdabolang', 'benpin', 'bensuo'];
 export function pickHotProducts(allProducts: ProductEntry[], limit = 6): ProductEntry[] {
   const chosen: ProductEntry[] = allProducts.filter((p) => p.data.hot);
@@ -68,13 +71,14 @@ export function pickHotProducts(allProducts: ProductEntry[], limit = 6): Product
   return chosen.slice(0, limit);
 }
 
-/** 产品列表页左侧“商品推荐”（优先还原原站 6 款） */
+/** 产品列表页左侧“商品推荐”：优先显示标了 featured: true 的产品，不足 6 款用默认列表补齐 */
 const FEATURED_SLUGS = ['135', '134', '131', '129', '5mmbenpin', '10mmtanpin'];
 export function pickFeaturedProducts(allProducts: ProductEntry[], limit = 6): ProductEntry[] {
-  const chosen: ProductEntry[] = [];
+  const chosen: ProductEntry[] = allProducts.filter((p) => p.data.featured);
   for (const slug of FEATURED_SLUGS) {
+    if (chosen.length >= limit) break;
     const found = allProducts.find((p) => p.data.slugName === slug);
-    if (found) chosen.push(found);
+    if (found && !chosen.includes(found)) chosen.push(found);
   }
   for (const p of allProducts) {
     if (chosen.length >= limit) break;

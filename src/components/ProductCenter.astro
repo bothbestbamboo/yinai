@@ -6,9 +6,8 @@ import { getProductUrl, pickFeaturedProducts, type ProductEntry } from '../utils
 interface Props {
   titleHeading: string;
   breadcrumbCategory?: { name: string; href: string };
-  pageProducts: ProductEntry[];   // 当前页展示的产品
-  scopeProducts: ProductEntry[];  // 当前范围全部产品（用于前端无刷新筛选）
-  allProducts: ProductEntry[];    // 全站产品（用于左侧推荐）
+  pageProducts: ProductEntry[]; // 当前页展示的产品
+  allProducts: ProductEntry[];  // 全站产品（用于跨系列筛选及左侧商品推荐）
   basePath: string;
   currentPage: number;
   totalPages: number;
@@ -18,7 +17,6 @@ const {
   titleHeading,
   breadcrumbCategory,
   pageProducts,
-  scopeProducts,
   allProducts,
   basePath,
   currentPage,
@@ -155,11 +153,11 @@ const serializedProducts = JSON.stringify(clientProducts).replace(/</g, '\\u003c
   </section>
 </div>
 
-<script type="application/json" id="scope-products-data" set:html={serializedProducts}></script>
+<script type="application/json" id="all-products-data" set:html={serializedProducts}></script>
 
 <script is:inline>
   (function () {
-    const dataEl = document.getElementById('scope-products-data');
+    const dataEl = document.getElementById('all-products-data');
     const panel = document.getElementById('productFilterPanel');
     const grid = document.getElementById('productGrid');
     const pagination = document.getElementById('productPagination');
@@ -219,8 +217,8 @@ const serializedProducts = JSON.stringify(clientProducts).replace(/</g, '\\u003c
 
       const desc = keys.map((k) => `${labels[k]}：${activeFilters[k]}`).join(' + ');
       if (summaryText) {
-  summaryText.innerHTML = `全站产品筛选 · 当前条件：<strong>${esc(desc)}</strong>，共找到 <strong class="cr">${matched.length}</strong> 款产品`;
-}
+        summaryText.innerHTML = `全站产品筛选 · 当前条件：<strong>${esc(desc)}</strong>，共找到 <strong class="cr">${matched.length}</strong> 款产品`;
+      }
 
       if (matched.length === 0) {
         grid.innerHTML = '<li style="grid-column:1/-1;"><div class="empty-tip">暂无同时满足上述条件的产品，请尝试减少筛选条件或点击“重置筛选”。</div></li>';
@@ -263,7 +261,7 @@ const serializedProducts = JSON.stringify(clientProducts).replace(/</g, '\\u003c
     resetTop?.addEventListener('click', clearAll);
     resetBar?.addEventListener('click', clearAll);
 
-    // 支持带筛选参数的 URL 直达（如 /product/index.html?hd=15mm&yt=室内）
+    // 支持带筛选参数的 URL 直达（如 /product/?hd=15mm&yt=室内）
     const initParams = new URLSearchParams(location.search);
     Object.keys(labels).forEach((k) => {
       const v = initParams.get(k);

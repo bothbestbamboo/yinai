@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startAuto();
   }
 
-  initSlider('.slideBox', 4500);
+  initSlider('.slideBox', 3800);
   initSlider('.slideBox-2', 4000);
 
   // 4. 通用 Tab 切换（首页 5大产品、7大优势、4大FAQ）
