@@ -177,6 +177,25 @@
   cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
+.home-page .slideTxtBox:not(.mobile-expanded) .hd ul li.on {
+    background: #ffffff;
+    border-color: #dfe5d4;
+    color: #3a4035;
+    font-weight: 500;
+    box-shadow: none;
+  }
+  .home-page .slideTxtBox:not(.mobile-expanded) .hd ul li:hover,
+  .home-page .slideTxtBox:not(.mobile-expanded) .hd ul li.on:hover {
+    border-color: #9BC713;
+    color: #5b7a00;
+  }
+  .home-page .slideTxtBox.mobile-expanded .hd ul li.on,
+  .home-page .slideTxtBox.mobile-expanded .hd ul li.on:hover {
+    background: #9BC713;
+    border-color: #9BC713;
+    color: #ffffff;
+    font-weight: 700;
+  }
 .home-page .slideTxtBox .hd ul li:hover {
   border-color: #9BC713;
   color: #5b7a00;

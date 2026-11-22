@@ -1949,10 +1949,11 @@ p.pages a.on, p.pages a:hover, p.pages span.page-current {
 }
 
 @media (max-width: 640px) {
-  .head-inner { flex-wrap: wrap; row-gap: 10px; }
-  .head-logo img { max-height: 38px; }
-  .search-form button span { display: none; }
-  .search-form button { width: 34px; padding: 0; }
+  .head-inner { flex-wrap: nowrap; padding: 10px 14px; gap: 12px; }
+  .head-logo { flex: 1; min-width: 0; }
+  .head-logo img { max-height: 36px; width: auto; max-width: 100%; }
+  .head-right { flex: 0 0 auto; }
+  .head .search-form { display: none; }
 
   /* 首页海报轮播 */
   .slideBox .bd ul { height: 270px; }
