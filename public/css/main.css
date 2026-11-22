@@ -1415,6 +1415,9 @@ p.pages a.on, p.pages a:hover, p.pages span.page-current {
   .w, .w2, .w3 { padding-left: 16px; padding-right: 16px; }
   .nav-list { gap: 8px; }
   .nav-list > li a.one { padding: 0 26px; }
+  .mega-grid { gap: 10px; }
+  .mega-col { padding: 10px; }
+  .mega-col-title h3 { font-size: 14px; }
 }
 
 @media (max-width: 992px) {
@@ -1447,37 +1450,35 @@ p.pages a.on, p.pages a:hover, p.pages span.page-current {
     padding: 10px 14px 14px;
     box-shadow: none;
     border-top: 1px solid #e5e5e5;
+    border-radius: 0;
     background: #fafafa;
   }
   .nav-list > li.has-mega:hover .mega-menu { display: none; }
   .nav-list > li.has-mega.sub-open .mega-menu { display: block; }
   .mega-grid { grid-template-columns: 1fr; gap: 10px; }
-  .mega-col a.two { margin-bottom: 4px; }
-  .mega-col a.two img { display: none; }
-  .mega-col a.two h3 {
-    padding: 6px 10px;
-    font-size: 14px;
-    line-height: 22px;
-    background: #eef6d6;
-    color: #5b7a00;
-    border-bottom: 0;
-    border-left: 3px solid #9BC713;
-    border-radius: 2px;
+  .mega-col {
+    background: #ffffff;
+    border-color: #e9ece0;
+    padding: 8px 10px;
   }
+  .mega-col:hover { transform: none; box-shadow: none; }
+  .mega-img-wrap { display: none; }
+  .mega-col-head {
+    padding: 4px 0 7px;
+    border-bottom: 1px solid #eef2e3;
+  }
+  .mega-col-title h3 { font-size: 14px; color: #5b7a00; }
   .mega-col ol {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 4px 8px;
+    gap: 2px 8px;
     margin-top: 6px;
   }
-  .mega-col ol li { margin-bottom: 0; }
+  .mega-col ol li { border-bottom: 0; }
   .mega-col ol li a {
     font-size: 13px;
     line-height: 28px;
-    padding: 0 6px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 0 6px 0 12px;
   }
 
   .slideBox .bd ul { height: 360px; }
