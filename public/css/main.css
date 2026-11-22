@@ -47,7 +47,6 @@ s { text-decoration: none; }
 /* ===== Header Logo + Search + Tel ===== */
 .site-header {
   background: #ffffff;
-  border-top: 3px solid #9BC713;
 }
 .head-inner {
   display: flex;
@@ -84,6 +83,23 @@ s { text-decoration: none; }
   color: #333;
 }
 .search-form input::placeholder { color: #8c9286; }
+.search-form input:-webkit-autofill,
+.search-form input:-webkit-autofill:hover,
+.search-form input:-webkit-autofill:focus,
+.search-form input:-webkit-autofill:active {
+  border-radius: 999px;
+  -webkit-text-fill-color: #333 !important;
+  caret-color: #333;
+  -webkit-box-shadow: 0 0 0 1000px #f5f7f1 inset !important;
+  box-shadow: 0 0 0 1000px #f5f7f1 inset !important;
+  transition: background-color 99999s ease-in-out 0s;
+}
+.search-form:focus-within input:-webkit-autofill,
+.search-form:focus-within input:-webkit-autofill:hover,
+.search-form:focus-within input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+}
 .search-form button {
   display: inline-flex;
   align-items: center;
