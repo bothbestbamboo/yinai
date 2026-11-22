@@ -7,24 +7,6 @@ interface Props {
 const { activeNav = '' } = Astro.props;
 ---
 <header class="site-header">
-  <div class="top">
-    <div class="w2 top-inner">
-      <div class="fl">
-        <span class="cf">欢迎来到宜耐地板！</span>
-      </div>
-      <div class="fr cf top-actions">
-        <div class="cf pr wx-hover">
-          <img src="/images/top-weixin.png" alt="微信" />微信扫码
-          <div class="pa wx-qr">
-            <img src="/images/weixin-top.jpg" alt="宜耐地板微信二维码" />
-          </div>
-        </div>
-        <span>|</span>
-        <button type="button" class="cf top-btn" id="btn-favorite">加入收藏</button>
-      </div>
-    </div>
-  </div>
-
   <div class="head">
     <div class="w head-inner">
       <div class="head-logo">
@@ -33,11 +15,24 @@ const { activeNav = '' } = Astro.props;
       <div class="head-right">
         <form class="search-form" action="/search/" method="get">
           <input type="text" name="q" placeholder="请输入产品或文章关键词" aria-label="站内搜索" />
-          <button class="f16 cf" type="submit">搜一搜</button>
+          <button type="submit">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="20" y1="20" x2="16.2" y2="16.2"></line>
+            </svg>
+            <span>搜一搜</span>
+          </button>
         </form>
         <a class="head-phone" href={`tel:${SITE.phoneRaw}`}>
-          <img src="/images/head-telphone.png" alt="联系电话" />
-          <span class="cg">{SITE.phoneDisplay}</span>
+          <span class="head-phone-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </span>
+          <span class="head-phone-info">
+            <span class="head-phone-label">服务与招商热线</span>
+            <span class="head-phone-num">{SITE.phoneDisplay}</span>
+          </span>
         </a>
         <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="打开导航菜单" aria-expanded="false">
           <span></span><span></span><span></span>
@@ -45,61 +40,66 @@ const { activeNav = '' } = Astro.props;
       </div>
     </div>
   </div>
-
-  <nav class="nav" id="mainNav" aria-label="主导航">
-    <div class="w2 nav-inner">
-      <ul class="nav-list">
-        <li class={activeNav === 'home' ? 'now' : ''}>
-          <a class="one" href="/">首页</a>
-        </li>
-        <li class={activeNav === 'about' ? 'now' : ''}>
-          <a class="one" href="/about/">关于宜耐</a>
-        </li>
-        <li class={`has-mega ${activeNav === 'product' ? 'now' : ''}`}>
-          <div class="nav-link-row">
-            <a class="one" href="/product/">宜耐产品</a>
-            <button type="button" class="mobile-sub-toggle" aria-label="展开产品系列">▾</button>
-          </div>
-          <div class="mega-menu">
-            <div class="mega-grid">
-              {PRODUCT_SERIES.map((series) => (
-                <div class="mega-col">
-                  <a class="two" href={series.href}>
-                    <div class="mega-img-wrap">
-                      <img width="170" height="95" src={series.navImg} alt={series.name} loading="lazy" />
-                    </div>
-                    <div class="mega-col-head">
-                      <div class="mega-col-title">
-                        <h3>{series.name}</h3>
-                        <span class="mega-col-tag">{series.tabName}</span>
-                      </div>
-                      <span class="mega-col-arrow" aria-hidden="true">
-                        <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <polyline points="6 3.5 10.5 8 6 12.5"></polyline>
-                        </svg>
-                      </span>
-                    </div>
-                  </a>
-                  <ol>
-                    {series.links.map((item) => (
-                      <li><a href={item.href}>{item.title}</a></li>
-                    ))}
-                  </ol>
-                </div>
-              ))}
-            </div>
-          </div>
-        </li>
-        <li class={activeNav === 'news' ? 'now' : ''}>
-          <a class="one" href="/news/">宜耐新闻</a>
-        </li>
-        <li class={activeNav === 'jiameng' ? 'now' : ''}>
-          <a class="one" href="/jiameng/">招商加盟</a>
-        </li>
-        <li class={activeNav === 'anli' ? 'now' : ''}>
-          <a class="one" href="/anli/">工程案例</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
 </header>
+
+<nav class="nav" id="mainNav" aria-label="主导航">
+  <div class="w2 nav-inner">
+    <ul class="nav-list">
+      <li class={activeNav === 'home' ? 'now' : ''}>
+        <a class="one" href="/">首页</a>
+      </li>
+      <li class={activeNav === 'about' ? 'now' : ''}>
+        <a class="one" href="/about/">关于宜耐</a>
+      </li>
+      <li class={`has-mega ${activeNav === 'product' ? 'now' : ''}`}>
+        <div class="nav-link-row">
+          <a class="one" href="/product/">
+            <span>宜耐产品</span>
+            <svg class="nav-caret" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="4 6 8 10 12 6"></polyline>
+            </svg>
+          </a>
+          <button type="button" class="mobile-sub-toggle" aria-label="展开产品系列">▾</button>
+        </div>
+        <div class="mega-menu">
+          <div class="mega-grid">
+            {PRODUCT_SERIES.map((series) => (
+              <div class="mega-col">
+                <a class="two" href={series.href}>
+                  <div class="mega-img-wrap">
+                    <img width="170" height="95" src={series.navImg} alt={series.name} loading="lazy" />
+                  </div>
+                  <div class="mega-col-head">
+                    <div class="mega-col-title">
+                      <h3>{series.name}</h3>
+                      <span class="mega-col-tag">{series.tabName}</span>
+                    </div>
+                    <span class="mega-col-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 3.5 10.5 8 6 12.5"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+                <ol>
+                  {series.links.map((item) => (
+                    <li><a href={item.href}>{item.title}</a></li>
+                  ))}
+                </ol>
+              </div>
+            ))}
+          </div>
+        </div>
+      </li>
+      <li class={activeNav === 'news' ? 'now' : ''}>
+        <a class="one" href="/news/">宜耐新闻</a>
+      </li>
+      <li class={activeNav === 'jiameng' ? 'now' : ''}>
+        <a class="one" href="/jiameng/">招商加盟</a>
+      </li>
+      <li class={activeNav === 'anli' ? 'now' : ''}>
+        <a class="one" href="/anli/">工程案例</a>
+      </li>
+    </ul>
+  </div>
+</nav>
