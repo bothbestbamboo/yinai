@@ -262,7 +262,7 @@ s { text-decoration: none; }
   transform: rotate(180deg);
 }
 .mobile-sub-toggle { display: none; }
-
+.mobile-nav-search { display: none; }
 .mega-menu {
   display: none;
   position: absolute;
@@ -1954,7 +1954,29 @@ p.pages a.on, p.pages a:hover, p.pages span.page-current {
   .head-logo img { max-height: 36px; width: auto; max-width: 100%; }
   .head-right { flex: 0 0 auto; }
   .head .search-form { display: none; }
-
+  .mobile-nav-search {
+    display: block;
+    padding: 12px 0 10px;
+    border-bottom: 1px solid #eef0ea;
+  }
+  .mobile-nav-search .search-form {
+    width: 100%;
+    max-width: none;
+    flex: none;
+  }
+  .mobile-nav-search .search-form input {
+    flex: 1;
+    width: auto;
+    height: 34px;
+    font-size: 14px;
+  }
+  .mobile-nav-search .search-form button {
+    height: 34px;
+    width: auto;
+    padding: 0 16px;
+    font-size: 13px;
+  }
+  
   /* 首页海报轮播 */
   .slideBox .bd ul { height: 270px; }
   .slideBox .prev, .slideBox .next, .hero-watermark, .hero-en { display: none; }

@@ -1235,7 +1235,13 @@
     gap: 16px;
   }
   .home-page .slideTxtBox-2 .bd .bd-div img {
-    height: 200px;
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    margin: 0 auto;
+    justify-self: center;
+    object-fit: contain;
+    border-radius: 10px;
   }
   .home-page .slideTxtBox-2 .bd .bd-div h4 {
     font-size: 18px;
