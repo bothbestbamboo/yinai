@@ -1,0 +1,266 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE, PRODUCT_SERIES } from '../data/site';
+---
+<BaseLayout
+  title="页面未找到 (404) | 宜耐地板"
+  keywords="404, 页面未找到, 宜耐地板"
+  description="抱歉，您访问的页面不存在或已迁移，请返回宜耐地板首页或通过站内搜索查找产品与资讯。"
+  activeNav=""
+>
+  <section class="notfound-section">
+    <div class="w">
+      <div class="notfound-card">
+        <span class="notfound-badge">ERROR 404</span>
+        <div class="notfound-code" aria-hidden="true">404</div>
+        <h1 class="notfound-title">抱歉，您访问的页面不存在或已迁移</h1>
+        <p class="notfound-desc">
+          可能是网址输入有误，或该产品/资讯链接在网站升级后已调整。<br />
+          您可以直接搜索关键词，或从下方快速进入对应栏目。
+        </p>
+
+        <!-- 复用 site.js 站内搜索 -->
+        <div class="notfound-search">
+          <form class="search-form notfound-form" action="/search/" method="get">
+            <input
+              type="text"
+              name="q"
+              placeholder="试试搜索：重竹、石塑、户外、型号编号..."
+              aria-label="404页面站内搜索"
+              autocomplete="off"
+            />
+            <button type="submit">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="20" y1="20" x2="16.2" y2="16.2"></line>
+              </svg>
+              <span>搜一搜</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- 主操作按钮 -->
+        <div class="notfound-actions">
+          <a class="nf-btn-primary" href="/">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 10.5 12 3l9 7.5"></path>
+              <path d="M5 9.5V20h14V9.5"></path>
+            </svg>
+            <span>返回网站首页</span>
+          </a>
+          <a class="nf-btn-ghost" href="/product/">浏览全部产品</a>
+          <a class="nf-btn-ghost" href={`tel:${SITE.phoneRaw}`}>致电 {SITE.phoneTel}</a>
+        </div>
+
+        <!-- 五大产品系列快捷入口 -->
+        <div class="notfound-series">
+          <p class="notfound-series-label">或者直接浏览宜耐五大核心系列：</p>
+          <div class="notfound-series-links">
+            {PRODUCT_SERIES.map((s) => (
+              <a href={s.href}>
+                <strong>{s.name}</strong>
+                <span>{s.tabName}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound-section {
+    padding: 64px 0 80px;
+    background:
+      radial-gradient(ellipse 65% 45% at 50% 0%, rgba(155, 199, 19, 0.1) 0%, transparent 70%),
+      #f6f8f2;
+  }
+  .notfound-card {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 52px 44px 46px;
+    background: #ffffff;
+    border: 1px solid #e6ebdc;
+    border-radius: 18px;
+    box-shadow: 0 16px 38px rgba(24, 34, 14, 0.06);
+    text-align: center;
+  }
+  .notfound-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 999px;
+    background: #eef6d6;
+    color: #5f8004;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+  }
+  .notfound-code {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(72px, 11vw, 120px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    background: linear-gradient(135deg, #262e1e 0%, #6a8d04 55%, #9BC713 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 14px;
+    user-select: none;
+  }
+  .notfound-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1c2119;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  .notfound-desc {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #656c60;
+    margin-bottom: 28px;
+  }
+
+  /* 搜索栏 */
+  .notfound-search {
+    max-width: 480px;
+    margin: 0 auto 26px;
+  }
+  .notfound-search .notfound-form {
+    width: 100%;
+    max-width: none;
+    padding: 4px;
+  }
+  .notfound-search .notfound-form input {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+    height: 38px;
+    font-size: 14px;
+  }
+  .notfound-search .notfound-form button {
+    height: 38px;
+    padding: 0 22px;
+    font-size: 14px;
+  }
+
+  /* 主按钮组 */
+  .notfound-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 34px;
+  }
+  .nf-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 11px 26px;
+    border-radius: 999px;
+    background: #9BC713;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(155, 199, 19, 0.28);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  .nf-btn-primary:hover {
+    background: #84ab0c;
+    color: #ffffff;
+    transform: translateY(-1px);
+  }
+  .nf-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1.5px solid #d4dec0;
+    color: #313b22;
+    font-size: 14px;
+    font-weight: 700;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  }
+  .nf-btn-ghost:hover {
+    border-color: #9BC713;
+    color: #5b7a00;
+    background: #f8fbf0;
+  }
+
+  /* 五大系列快捷入口 */
+  .notfound-series {
+    padding-top: 26px;
+    border-top: 1px dashed #e2e8d6;
+  }
+  .notfound-series-label {
+    font-size: 13px;
+    color: #7c8476;
+    margin-bottom: 14px;
+  }
+  .notfound-series-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .notfound-series-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    background: #f7f9f3;
+    border: 1px solid #e5eadb;
+    font-size: 13px;
+    color: #2c3326;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+  .notfound-series-links a span {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #eef4dc;
+    color: #658405;
+  }
+  .notfound-series-links a:hover {
+    background: #ffffff;
+    border-color: #9BC713;
+    color: #5b7a00;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 640px) {
+    .notfound-section {
+      padding: 32px 0 48px;
+    }
+    .notfound-card {
+      padding: 32px 18px 28px;
+      border-radius: 14px;
+    }
+    .notfound-title {
+      font-size: 19px;
+    }
+    .notfound-desc {
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+    .notfound-search .notfound-form button {
+      padding: 0 16px;
+    }
+    .notfound-actions {
+      flex-direction: column;
+      margin-bottom: 26px;
+    }
+    .nf-btn-primary,
+    .nf-btn-ghost {
+      width: 100%;
+    }
+  }
+</style>
