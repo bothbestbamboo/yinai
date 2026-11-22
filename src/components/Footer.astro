@@ -7,41 +7,50 @@ const footerSeries = PRODUCT_SERIES.slice(0, 3);
     <div class="liucheng w">
       <img src="/images/liucheng.png" alt="宜耐服务流程" />
     </div>
+
     <div class="bot-cont w">
       <div class="bot-left">
         <div class="bot-tel">
-          <img src="/images/bot-tel.png" alt="热线电话" />
-          <a href={`tel:${SITE.phoneRaw}`} class="cf"><b>{SITE.phoneTel}</b></a>
+          <span class="bot-tel-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </span>
+          <div class="bot-tel-info">
+            <span class="bot-tel-label">全国服务与招商热线</span>
+            <a href={`tel:${SITE.phoneRaw}`} class="bot-tel-num">{SITE.phoneTel}</a>
+          </div>
         </div>
+
         <div class="bot-qiehuan">
           <div class="hd">
             <ul>
               <li class="b-li-1 on">
-                <span></span>
+                <span title="宜耐微信"></span>
                 <div>
-                  <img width="97" height="98" src="/images/weixin-1.jpg" alt="宜耐微信" loading="lazy" />
-                  <p class="f13 cf b tc">宜耐微信</p>
+                  <img width="98" height="98" src="/images/weixin-1.jpg" alt="宜耐微信" loading="lazy" />
+                  <p>宜耐微信</p>
                 </div>
               </li>
               <li class="b-li-2">
-                <span></span>
+                <span title="宜耐QQ"></span>
                 <div>
-                  <img width="97" height="98" src="/images/weixin-2.jpg" alt="宜耐QQ" loading="lazy" />
-                  <p class="f13 cf b tc">宜耐QQ</p>
+                  <img width="98" height="98" src="/images/weixin-2.jpg" alt="宜耐QQ" loading="lazy" />
+                  <p>宜耐QQ</p>
                 </div>
               </li>
               <li class="b-li-3">
-                <span></span>
+                <span title="宜耐支付宝"></span>
                 <div>
-                  <img width="97" height="98" src="/images/weixin-3.jpg" alt="宜耐支付宝" loading="lazy" />
-                  <p class="f13 cf b tc">宜耐支付宝</p>
+                  <img width="98" height="98" src="/images/weixin-3.jpg" alt="宜耐支付宝" loading="lazy" />
+                  <p>宜耐支付宝</p>
                 </div>
               </li>
               <li class="b-li-5">
-                <span></span>
+                <span title="宜耐旺铺"></span>
                 <div>
-                  <img width="97" height="98" src="/images/weixin-5.jpg" alt="宜耐旺铺" loading="lazy" />
-                  <p class="f13 cf b tc">宜耐旺铺</p>
+                  <img width="98" height="98" src="/images/weixin-5.jpg" alt="宜耐旺铺" loading="lazy" />
+                  <p>宜耐旺铺</p>
                 </div>
               </li>
             </ul>
@@ -50,33 +59,47 @@ const footerSeries = PRODUCT_SERIES.slice(0, 3);
       </div>
 
       <div class="bot-right">
-        <ul class="bot-links">
-          <li class="f18">
-            <dl>
-              <dt><a href="/about/">关于宜耐</a></dt>
-              <dt><a href="/product/">宜耐产品</a></dt>
-              <dt><a href="/news/">宜耐新闻</a></dt>
-              <dt><a href="/jiameng/">招商加盟</a></dt>
-              <dt><a href="/anli/">工程案例</a></dt>
-            </dl>
-          </li>
+        <div class="bot-links">
+          <div class="bot-nav-col">
+            <h4 class="bot-col-heading">快速导航</h4>
+            <ul>
+              <li><a href="/about/">关于宜耐</a></li>
+              <li><a href="/product/">宜耐产品</a></li>
+              <li><a href="/news/">宜耐新闻</a></li>
+              <li><a href="/jiameng/">招商加盟</a></li>
+              <li><a href="/anli/">工程案例</a></li>
+            </ul>
+          </div>
+
           {footerSeries.map((series) => (
-            <li class="f16">
-              <dl>
-                <dt class="f18"><a href={series.href}>{series.name}</a></dt>
+            <div class="bot-series-card">
+              <a class="bot-series-head" href={series.href}>
+                <div class="bot-series-title">
+                  <h4>{series.name}</h4>
+                  <span class="bot-series-tag">{series.tabName}</span>
+                </div>
+                <span class="bot-series-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 3.5 10.5 8 6 12.5"></polyline>
+                  </svg>
+                </span>
+              </a>
+              <ul class="bot-series-list">
                 {series.links.map((item) => (
-                  <dd><a href={item.href}>{item.title}</a></dd>
+                  <li><a href={item.href}>{item.title}</a></li>
                 ))}
-              </dl>
-            </li>
+              </ul>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
 
-    <div class="footer-copy w tc">
-      ©{new Date().getFullYear()} {SITE.name} · {SITE.address} &nbsp;|&nbsp; {SITE.email} <br />
-      {SITE.beianGongan} &nbsp;&nbsp; {SITE.beianIcp}
+    <div class="footer-copy">
+      <div class="w footer-copy-inner">
+        <p>© {new Date().getFullYear()} {SITE.name} &nbsp;·&nbsp; {SITE.address} &nbsp;·&nbsp; {SITE.email}</p>
+        <p class="footer-beian">{SITE.beianGongan} &nbsp;&nbsp;|&nbsp;&nbsp; {SITE.beianIcp}</p>
+      </div>
     </div>
   </div>
 </footer>
