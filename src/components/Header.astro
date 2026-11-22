@@ -65,8 +65,20 @@ const { activeNav = '' } = Astro.props;
               {PRODUCT_SERIES.map((series) => (
                 <div class="mega-col">
                   <a class="two" href={series.href}>
-                    <img width="170" height="95" src={series.navImg} alt={series.name} loading="lazy" />
-                    <h3 class="n cf f16">&gt;&gt; {series.name}</h3>
+                    <div class="mega-img-wrap">
+                      <img width="170" height="95" src={series.navImg} alt={series.name} loading="lazy" />
+                    </div>
+                    <div class="mega-col-head">
+                      <div class="mega-col-title">
+                        <h3>{series.name}</h3>
+                        <span class="mega-col-tag">{series.tabName}</span>
+                      </div>
+                      <span class="mega-col-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="6 3.5 10.5 8 6 12.5"></polyline>
+                        </svg>
+                      </span>
+                    </div>
                   </a>
                   <ol>
                     {series.links.map((item) => (
