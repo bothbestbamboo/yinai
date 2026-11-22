@@ -1,13 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. 加入收藏提示
-  const favBtn = document.getElementById('btn-favorite');
-  if (favBtn) {
-    favBtn.addEventListener('click', () => {
-      alert('请使用浏览器快捷键 Ctrl + D（Mac 为 Command + D）收藏本站！');
-    });
-  }
-
-  // 2. 移动端导航开关与子菜单折叠
+  // 1. 移动端导航开关与子菜单折叠
   const menuBtn = document.getElementById('mobileMenuBtn');
   const mainNav = document.getElementById('mainNav');
   if (menuBtn && mainNav) {
@@ -26,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 3. 通用轮播初始化（首页大轮播 & 产品详情图集轮播）
+  // 2. 通用轮播初始化（首页大轮播 & 产品详情图集轮播）
   function initSlider(selector, autoInterval = 4500) {
     const box = document.querySelector(selector);
     if (!box) return;
@@ -60,7 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
     prevBtn?.addEventListener('click', () => { goTo(current - 1); startAuto(); });
     nextBtn?.addEventListener('click', () => { goTo(current + 1); startAuto(); });
     thumbs.forEach((thumb, i) => {
-      thumb.addEventListener('mouseenter', () => { goTo(i); stopAuto(); });
+      thumb.addEventListener('mouseenter', () => {
+        if (window.innerWidth > 640) { goTo(i); stopAuto(); }
+      });
       thumb.addEventListener('click', () => { goTo(i); startAuto(); });
     });
 
@@ -74,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSlider('.slideBox', 3800);
   initSlider('.slideBox-2', 4000);
 
-  // 4. 通用 Tab 切换（首页 5大产品、7大优势、4大FAQ）
+  // 3. 通用 Tab 切换（首页 5大产品、7大优势、4大FAQ）
   function initTabs(selector) {
     document.querySelectorAll(selector).forEach((box) => {
       const tabs = Array.from(box.querySelectorAll('.hd ul > li'));
@@ -87,7 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       tabs.forEach((tab, idx) => {
-        tab.addEventListener('mouseenter', () => activate(idx));
+        tab.addEventListener('mouseenter', () => {
+          if (window.innerWidth > 640) activate(idx);
+        });
         tab.addEventListener('click', () => activate(idx));
       });
       activate(0);
@@ -98,17 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs('.slideTxtBox-2');
   initTabs('.slideTxtBox-3');
 
-  // 5. 页脚二维码切换
+  // 4. 页脚二维码切换
   const qrItems = Array.from(document.querySelectorAll('.bot-qiehuan .hd ul > li'));
   qrItems.forEach((li) => {
     const activate = () => {
       qrItems.forEach((item) => item.classList.toggle('on', item === li));
     };
-    li.addEventListener('mouseenter', activate);
+    li.addEventListener('mouseenter', () => {
+      if (window.innerWidth > 640) activate();
+    });
     li.addEventListener('click', activate);
   });
 
-  // 6. 工程案例弹窗预览（如案例列表页使用弹窗）
+  // 5. 工程案例弹窗预览
   const modal = document.querySelector('.zhezhaoceng');
   if (modal) {
     const modalImg = modal.querySelector('.li-cont img');
@@ -139,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 7. 顶部及移动端菜单搜索框无参数跳转（地址栏只显示 /search/，不带 ?q=）
+  // 6. 顶部及移动端菜单搜索框无参数跳转（地址栏只显示 /search/，不带 ?q=）
   document.querySelectorAll('form.search-form').forEach((searchForm) => {
     searchForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -151,5 +149,4 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = '/search/';
     });
   });
-  }
 });
