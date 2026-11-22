@@ -295,4 +295,32 @@ const sectionSeries = sectionSeriesOrder.map((key) => PRODUCT_SERIES.find((s) =>
       </ul>
     </section>
   </div>
+
+  <script is:inline>
+    (function () {
+      const box = document.querySelector('.slideTxtBox');
+      if (!box) return;
+      const tabs = Array.from(box.querySelectorAll('.hd ul li'));
+      const panels = Array.from(box.querySelectorAll('.bd .bd-div'));
+      let mobileActiveIdx = -1;
+
+      tabs.forEach((tab, idx) => {
+        tab.addEventListener('click', () => {
+          if (window.innerWidth > 640) return;
+
+          // 再次点击当前已展开的分类则收起
+          if (box.classList.contains('mobile-expanded') && mobileActiveIdx === idx) {
+            box.classList.remove('mobile-expanded');
+            mobileActiveIdx = -1;
+            return;
+          }
+
+          mobileActiveIdx = idx;
+          box.classList.add('mobile-expanded');
+          tabs.forEach((t, i) => t.classList.toggle('on', i === idx));
+          panels.forEach((p, i) => p.classList.toggle('is-active', i === idx));
+        });
+      });
+    })();
+  </script>
 </BaseLayout>

@@ -2030,3 +2030,42 @@ p.pages a.on, p.pages a:hover, p.pages span.page-current {
     line-height: 1.4;
   }
 }
+
+/* =========================================================
+   手机端首页 5 大产品 Tab 默认收起，点击后再展开
+   ========================================================= */
+@media (max-width: 640px) {
+  /* 未点击前隐藏下方产品图片区 */
+  .slideTxtBox:not(.mobile-expanded) .bd {
+    display: none;
+  }
+
+  /* 未展开时，首个按钮恢复白底，避免让用户误以为已经展开 */
+  .slideTxtBox:not(.mobile-expanded) .hd ul li.on {
+    background: #ffffff !important;
+    border-color: #d9d9d9;
+    color: #333333;
+    font-weight: 400;
+  }
+
+  /* 按钮文字与小箭头居中对齐，提示可点击展开/收起 */
+  .slideTxtBox .hd ul li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 38px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .slideTxtBox .hd ul li::after {
+    content: "▾";
+    font-size: 11px;
+    color: #999999;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  .slideTxtBox.mobile-expanded .hd ul li.on::after {
+    color: #ffffff;
+    transform: rotate(180deg);
+  }
+}
