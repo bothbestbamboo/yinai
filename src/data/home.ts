@@ -25,9 +25,24 @@ export const HOME_BANNERS = [
   },
 ];
 
+export const HOME_STATS = [
+  { icon: 'years' as const, num: '20+ 年', label: '专注竹木与石塑地板智造' },
+  { icon: 'global' as const, num: '50+ 国', label: '远销欧美及全球建材市场' },
+  { icon: 'cert' as const, num: 'CARB · FSC', label: '严苛国际环保与质量认证' },
+  { icon: 'factory' as const, num: '源头厂家', label: '德系精密设备 · 支持定制直供' },
+];
+
+export const HOME_SERIES_DESC: Record<string, string> = {
+  naiyong: '精选5-6年优质楠竹，纹理清雅、温润舒适，兼顾家装格调与长久耐用。',
+  shisu: '环保防水防滑、静音快装锁扣，轻松胜任厨卫、地暖与商业空间。',
+  naimo: '高密重竹重组工艺，硬度高、抗冲击更耐磨，适合高频人居与工装场景。',
+  naifu: '高温深碳防腐处理，防潮耐候抗开裂，专为庭院、栈道与市政户外打造。',
+  naijiu: '多厚度竹集成板与家具表板，结构稳固环保，赋能定制家具与室内饰面。',
+};
+
 export const HOME_ADVANTAGES = [
   {
-    tab: '1.精选楠竹',
+    tab: '精选楠竹',
     img: '/d/file/chanpinyoushishifan/2017-08-19/1b205773414a6f916468b75c69f5061f.jpg',
     title: '宜耐地板 精选楠竹 源于大自然',
     paragraphs: [
@@ -35,7 +50,7 @@ export const HOME_ADVANTAGES = [
     ],
   },
   {
-    tab: '2.CARB认证',
+    tab: 'CARB认证',
     img: '/d/file/chanpinyoushishifan/2017-08-19/3e287b62d7c8b99e3219298f34674fbe.jpg',
     title: 'CARB认证：世界上最严苛的人造板甲醛释放检测标准',
     paragraphs: [
@@ -44,7 +59,7 @@ export const HOME_ADVANTAGES = [
     ],
   },
   {
-    tab: '3.行业龙头',
+    tab: '行业龙头',
     img: '/d/file/chanpinyoushishifan/2017-08-19/96b36eba1d7191774cd686c728a9942e.jpg',
     title: '宜耐地板 浙江省林业龙头企业 农业龙头企业',
     paragraphs: [
@@ -53,7 +68,7 @@ export const HOME_ADVANTAGES = [
     ],
   },
   {
-    tab: '4.欧美同步',
+    tab: '欧美同步',
     img: '/d/file/chanpinyoushishifan/2017-08-19/db691faab3e04cd3398d130c9a4a6e95.jpg',
     title: '无需进口 享受欧美同款地板',
     paragraphs: [
@@ -62,7 +77,7 @@ export const HOME_ADVANTAGES = [
     ],
   },
   {
-    tab: '5.非常耐磨',
+    tab: '非常耐磨',
     img: '/d/file/chanpinyoushishifan/2017-08-19/c2ae0d56afd8b006028d6704dee9bfc5.jpg',
     title: '密度高 硬度强 更耐磨',
     paragraphs: [
@@ -71,7 +86,7 @@ export const HOME_ADVANTAGES = [
     ],
   },
   {
-    tab: '6.颜色均匀',
+    tab: '颜色均匀',
     img: '/d/file/chanpinyoushishifan/2017-08-19/3498d0875f0e788e65aad894c3a0e78e.jpg',
     title: '纹理细腻 高雅清新 品味独特',
     paragraphs: [
@@ -80,7 +95,7 @@ export const HOME_ADVANTAGES = [
     ],
   },
   {
-    tab: '7.低碳环保',
+    tab: '低碳环保',
     img: '/d/file/chanpinyoushishifan/2017-08-19/d59f538809aa363b4b2293c45cb7eb5a.jpg',
     title: '宜耐地板是低碳环保装饰建材的示范企业',
     paragraphs: [
@@ -90,9 +105,26 @@ export const HOME_ADVANTAGES = [
   },
 ];
 
+export const HOME_FACTORY = {
+  mainImg: '/images/factory-exterior.jpg',
+  mainBadge: '现代化标准化生产基地',
+  subImages: [
+    { img: '/images/factory-homag.jpg', label: '德国豪迈精密开槽线' },
+    { img: '/images/factory-workshop.jpg', label: '洁净精加工与涂装车间' },
+    { img: '/images/factory-warehouse.jpg', label: '规模化胚板周转仓储' },
+  ],
+  lead: '宜耐地板扎根中国竹乡，拥有现代化标准化厂房与完整的竹木、石塑地板智造体系，从原竹精选、高温压制到精密开槽与环保涂装，全流程自主品控，稳定供应国内外家装与大型工程项目。',
+  points: [
+    '引进德国豪迈（HOMAG）精密开槽榫卯设备，锁扣与企口严丝合缝、铺装更平整',
+    '多道高耐磨环保 UV 涂装产线与人工精细分色，兼顾原竹温润质感与耐刮性能',
+    '大型胚板与成品常备周转仓库，常规规格闪电发运，支持工程与外贸深度定制',
+  ],
+  certs: ['ISO 9001 质量体系', 'ISO 14001 环境体系', 'CARB 环保认证', '欧盟 CE 认证', 'FSC 森林认证'],
+};
+
 export const HOME_BOTTOM_IMAGES = [
-  { img: '/d/file/shouyexiamiantu/2017-08-21/94b58aadcca6dffb4d4ac5a82d79149b.jpg', alt: '宜耐竹地板展示' },
-  { img: '/d/file/shouyexiamiantu/2017-08-21/3eba8ea4ff8051250115bd74501eaa50.jpg', alt: '耐磨重竹系列' },
-  { img: '/d/file/shouyexiamiantu/2017-08-21/44c6a26346233eb592d607f263c1e0b1.jpg', alt: '户外高耐重竹系列' },
-  { img: '/d/file/shouyexiamiantu/2017-08-21/12cd241029dcf9e7a82d1987b211b425.jpg', alt: '石塑锁扣地板系列' },
+  { img: '/d/file/shouyexiamiantu/2017-08-21/94b58aadcca6dffb4d4ac5a82d79149b.jpg', alt: '宜耐本色竹地板实景' },
+  { img: '/d/file/shouyexiamiantu/2017-08-21/3eba8ea4ff8051250115bd74501eaa50.jpg', alt: '高密耐磨重竹系列' },
+  { img: '/d/file/shouyexiamiantu/2017-08-21/44c6a26346233eb592d607f263c1e0b1.jpg', alt: '户外高耐重竹地板' },
+  { img: '/d/file/shouyexiamiantu/2017-08-21/12cd241029dcf9e7a82d1987b211b425.jpg', alt: 'SPC 石塑锁扣地板' },
 ];

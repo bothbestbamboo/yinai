@@ -1,7 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { PRODUCT_SERIES } from '../data/site';
-import { HOME_BANNERS, HOME_ADVANTAGES, HOME_BOTTOM_IMAGES } from '../data/home';
+import { SITE, PRODUCT_SERIES } from '../data/site';
+import {
+  HOME_BANNERS,
+  HOME_STATS,
+  HOME_SERIES_DESC,
+  HOME_ADVANTAGES,
+  HOME_FACTORY,
+  HOME_BOTTOM_IMAGES,
+} from '../data/home';
 import {
   getAllProducts,
   getMainNews,
@@ -11,6 +18,7 @@ import {
   getFaqUrl,
   formatShortDate,
 } from '../utils/content';
+import '../styles/home.css';
 
 const allProducts = await getAllProducts();
 const latestNews = (await getMainNews()).slice(0, 4);
@@ -19,179 +27,278 @@ const faqs = (await getAllFaq()).slice(0, 4);
 const byCategory = (cat: string, limit: number) =>
   allProducts.filter((p) => p.data.category === cat).slice(0, limit);
 
-// 首页顶部 5 大产品 Tab 顺序：石塑、普竹、重竹、户外、家具板材（1:1 还原）
+// 首页顶部 5 大产品 Tab 顺序：石塑、普竹、重竹、户外、家具板材
 const tabSeriesOrder = ['shisu', 'naiyong', 'naimo', 'naifu', 'naijiu'] as const;
 const tabSeries = tabSeriesOrder.map((key) => PRODUCT_SERIES.find((s) => s.key === key)!);
 
-// 首页 5 大系列区块顺序：耐用、耐石、耐磨、耐腐、耐久（1:1 还原）
+// 首页 5 大系列区块顺序：耐用、耐石、耐磨、耐腐、耐久
 const sectionSeriesOrder = ['naiyong', 'shisu', 'naimo', 'naifu', 'naijiu'] as const;
 const sectionSeries = sectionSeriesOrder.map((key) => PRODUCT_SERIES.find((s) => s.key === key)!);
 ---
 <BaseLayout activeNav="home">
-  <!-- 大图轮播 -->
-  <section id="slideBox" class="slideBox pr">
-    <div class="bd">
-      <ul>
-        {HOME_BANNERS.map((b, i) => (
-          <li class={i === 0 ? 'is-active' : ''}>
-            <div class={`banner-slide banner-slide--${b.layout}`}>
-              <img
-                src={b.img}
-                alt={b.alt}
-                loading={i === 0 ? 'eager' : 'lazy'}
-                fetchpriority={i === 0 ? 'high' : 'auto'}
-              />
-              <div class="hero-scrim" aria-hidden="true"></div>
-              <span class="hero-watermark" aria-hidden="true">{b.watermark}</span>
+  <div class="home-page">
+    <!-- 1. 大图海报轮播 -->
+    <section id="slideBox" class="slideBox pr">
+      <div class="bd">
+        <ul>
+          {HOME_BANNERS.map((b, i) => (
+            <li class={i === 0 ? 'is-active' : ''}>
+              <div class={`banner-slide banner-slide--${b.layout}`}>
+                <img
+                  src={b.img}
+                  alt={b.alt}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={i === 0 ? 'high' : 'auto'}
+                />
+                <div class="hero-scrim" aria-hidden="true"></div>
+                <span class="hero-watermark" aria-hidden="true">{b.watermark}</span>
 
-              <div class="hero-overlay">
-                <div class="w">
-                  <div class="hero-content">
-                    <div class="hero-eyebrow">
-                      <span class="hero-badge">{b.badge}</span>
-                      <span class="hero-en">{b.enTag}</span>
-                    </div>
+                <div class="hero-overlay">
+                  <div class="w">
+                    <div class="hero-content">
+                      <div class="hero-eyebrow">
+                        <span class="hero-badge">{b.badge}</span>
+                        <span class="hero-en">{b.enTag}</span>
+                      </div>
 
-                    {i === 0 ? (
-                      <h1 class="hero-title">
-                        <span class="hero-title-lead">{b.titleLead}</span>
-                        <span class="hero-title-sep" aria-hidden="true">·</span>
-                        <span class="hero-title-main">{b.titleMain}</span>
-                      </h1>
-                    ) : (
-                      <h2 class="hero-title">
-                        <span class="hero-title-lead">{b.titleLead}</span>
-                        <span class="hero-title-sep" aria-hidden="true">，</span>
-                        <span class="hero-title-main">{b.titleMain}</span>
-                      </h2>
-                    )}
+                      {i === 0 ? (
+                        <h1 class="hero-title">
+                          <span class="hero-title-lead">{b.titleLead}</span>
+                          <span class="hero-title-sep" aria-hidden="true">·</span>
+                          <span class="hero-title-main">{b.titleMain}</span>
+                        </h1>
+                      ) : (
+                        <h2 class="hero-title">
+                          <span class="hero-title-lead">{b.titleLead}</span>
+                          <span class="hero-title-sep" aria-hidden="true">，</span>
+                          <span class="hero-title-main">{b.titleMain}</span>
+                        </h2>
+                      )}
 
-                    <div class="hero-features">
-                      {b.features.map((feat) => (
-                        <span>{feat}</span>
-                      ))}
-                    </div>
+                      <div class="hero-features">
+                        {b.features.map((feat) => (
+                          <span>{feat}</span>
+                        ))}
+                      </div>
 
-                    <div class="hero-stamp-wrap">
-                      <span class="hero-stamp">{b.stamp}</span>
+                      <div class="hero-stamp-wrap">
+                        <span class="hero-stamp">{b.stamp}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-    {HOME_BANNERS.length > 1 && (
-      <>
-        <button type="button" class="prev" aria-label="上一张">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <button type="button" class="next" aria-label="下一张">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-        <div class="hd banner-dots">
-          <ul>
-            {HOME_BANNERS.map((_, i) => (
-              <li class={i === 0 ? 'on' : ''} aria-label={`切换到第${i + 1}张`}></li>
-            ))}
-          </ul>
-        </div>
-      </>
-    )}
-  </section>
-
-  <!-- 5大产品 Tab 切换 -->
-  <section class="w">
-    <div class="slideTxtBox">
-      <div class="hd f18 cy">
-        <ul>
-          {tabSeries.map((s, i) => (
-            <li class={i === 0 ? 'on' : ''}>{s.tabName}</li>
+            </li>
           ))}
         </ul>
       </div>
-      <div class="bd f14">
-        {tabSeries.map((s, i) => (
-          <div class={`bd-div ${i === 0 ? 'is-active' : ''}`}>
+      {HOME_BANNERS.length > 1 && (
+        <>
+          <button type="button" class="prev" aria-label="上一张">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button type="button" class="next" aria-label="下一张">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+          <div class="hd banner-dots">
             <ul>
-              {byCategory(s.key, 3).map((p) => (
+              {HOME_BANNERS.map((_, i) => (
+                <li class={i === 0 ? 'on' : ''} aria-label={`切换到第${i + 1}张`}></li>
+              ))}
+            </ul>
+          </div>
+        </>
+      )}
+    </section>
+
+    <!-- 2. 品牌实力数据带 -->
+    <section class="home-stats-wrap" aria-label="品牌核心实力">
+      <div class="w">
+        <ul class="home-stats-grid">
+          {HOME_STATS.map((st) => (
+            <li class="home-stat-item">
+              <span class="home-stat-icon" aria-hidden="true">
+                {st.icon === 'years' && (
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="6"></circle>
+                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+                  </svg>
+                )}
+                {st.icon === 'global' && (
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                  </svg>
+                )}
+                {st.icon === 'cert' && (
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                  </svg>
+                )}
+                {st.icon === 'factory' && (
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path>
+                    <path d="M17 18h1"></path>
+                    <path d="M12 18h1"></path>
+                    <path d="M7 18h1"></path>
+                  </svg>
+                )}
+              </span>
+              <div>
+                <p class="home-stat-num">{st.num}</p>
+                <p class="home-stat-label">{st.label}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3. 5 大核心品类速览（兼容 site.js .slideTxtBox） -->
+    <section class="home-quick-sec">
+      <div class="w">
+        <div class="home-sec-head home-sec-head--center">
+          <span class="home-sec-en">CORE CATEGORIES</span>
+          <h2 class="home-sec-title">五大核心产品品类</h2>
+          <p class="home-sec-sub">覆盖室内家装、商业空间与户外园林场景，点击切换快速浏览代表产品</p>
+        </div>
+
+        <div class="slideTxtBox">
+          <div class="hd">
+            <ul>
+              {tabSeries.map((s, i) => (
+                <li class={i === 0 ? 'on' : ''}>{s.tabName}</li>
+              ))}
+            </ul>
+          </div>
+          <div class="bd">
+            {tabSeries.map((s, i) => (
+              <div class={`bd-div ${i === 0 ? 'is-active' : ''}`}>
+                <ul>
+                  {byCategory(s.key, 3).map((p) => (
+                    <li>
+                      <a class="home-pro-card" href={getProductUrl(p)}>
+                        <div class="home-pro-thumb">
+                          <img width="380" height="380" src={p.data.cover || '/images/logo.png'} alt={p.data.title} loading="lazy" />
+                          <span class="home-pro-cat">{s.tabName}</span>
+                        </div>
+                        <div class="home-pro-body">
+                          <div class="home-pro-meta">
+                            <h3 class="home-pro-title">{p.data.title}</h3>
+                            <p class="home-pro-sub">
+                              {p.data.model ? `型号：${p.data.model}` : p.data.tagline || `${s.name} · 源头品质`}
+                            </p>
+                          </div>
+                          <span class="home-pro-arrow" aria-hidden="true">
+                            <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <polyline points="6 3.5 10.5 8 6 12.5"></polyline>
+                            </svg>
+                          </span>
+                        </div>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 5 大产品系列楼层（白底/浅灰绿交替通栏） -->
+    {sectionSeries.map((s, idx) => (
+      <section class={`home-series-band ${idx % 2 === 1 ? 'is-alt' : ''}`}>
+        <div class="w">
+          <div class="home-sec-head">
+            <div>
+              <span class="home-sec-en">{s.enName}</span>
+              <div class="home-sec-title-row">
+                <h2 class="home-sec-title">{s.name}</h2>
+                <span class="home-sec-tag">{s.tabName}</span>
+              </div>
+            </div>
+            <a class="home-more-pill" href={s.href}>
+              <span>查看全部{s.name}</span>
+              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="3" y1="8" x2="13" y2="8"></line>
+                <polyline points="9 4 13 8 9 12"></polyline>
+              </svg>
+            </a>
+          </div>
+
+          <div class="home-series-layout">
+            <a class="home-series-cover" href={s.href}>
+              <img width="462" height="462" src={s.homeBannerImg} alt={s.name} loading="lazy" />
+              <div class="home-series-cover-body">
+                <p class="home-series-cover-en">{s.enName}</p>
+                <h3>{s.name} · {s.tabName}</h3>
+                <p>{HOME_SERIES_DESC[s.key] || ''}</p>
+                <span class="home-series-cover-btn">
+                  <span>进入系列</span>
+                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 3.5 10.5 8 6 12.5"></polyline>
+                  </svg>
+                </span>
+              </div>
+            </a>
+
+            <ul class="home-series-grid">
+              {byCategory(s.key, 6).map((p) => (
                 <li>
-                  <a class="pr" href={getProductUrl(p)}>
-                    <img width="350" height="350" src={p.data.cover || '/images/logo.png'} alt={p.data.title} loading="lazy" />
-                    <div class="pa">
-                      <p class="chinese cf">{s.tabName}</p>
-                      <p class="english cf">NEW ART</p>
+                  <a class="home-mini-card" href={getProductUrl(p)}>
+                    <div class="home-mini-thumb">
+                      <img width="260" height="260" src={p.data.cover || '/images/logo.png'} alt={p.data.title} loading="lazy" />
+                    </div>
+                    <div class="home-mini-info">
+                      <h4 class="home-mini-title" title={p.data.title}>{p.data.title}</h4>
+                      <span class="home-mini-model">
+                        {p.data.model ? `型号 ${p.data.model}` : s.tabName}
+                      </span>
                     </div>
                   </a>
                 </li>
               ))}
             </ul>
           </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- 5大产品系列楼层 -->
-  <div class="w">
-    {sectionSeries.map((s) => (
-      <section>
-        <div class="index-com-top">
-          <div class="series-title-box">
-            <em><img src={s.icon} alt="" /></em>
-            <h3>{s.name}</h3>
-            <span class="f14">{s.enName}</span>
-          </div>
-          <a class="more-link" href={s.href}>MORE+</a>
-        </div>
-        <div class="index-com-cont">
-          <div class="series-cover">
-            <a href={s.href}>
-              <img width="462" height="462" src={s.homeBannerImg} alt={s.name} loading="lazy" />
-              <p>{s.name}</p>
-            </a>
-          </div>
-          <ul class="series-grid">
-            {byCategory(s.key, 6).map((p) => (
-              <li>
-                <a href={getProductUrl(p)}>
-                  <img width="223" height="223" src={p.data.cover || '/images/logo.png'} alt={p.data.title} loading="lazy" />
-                  <p>{p.data.title}</p>
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
     ))}
 
-    <!-- 产品优势示范（7大优势） -->
-    <section>
-      <div class="index-com-div-t">
-        <em><img src="/images/index-icon-1.png" alt="" /></em>
-        <h3>产品优势示范</h3>
-        <span class="f20 c7">Econice Product Advantages</span>
-      </div>
-      <div class="seven-two">
-        <div class="slideTxtBox-2 border">
-          <div class="hd f18 cy">
+    <!-- 5. 7 大核心优势（深炭黑质感分栏，兼容 site.js .slideTxtBox-2） -->
+    <section class="home-adv-section">
+      <div class="w">
+        <div class="home-sec-head">
+          <div>
+            <span class="home-sec-en">ECONICE ADVANTAGES</span>
+            <h2 class="home-sec-title">为什么选择宜耐地板</h2>
+            <p class="home-sec-sub">从万亩毛竹原材甄选到欧美级环保与耐磨标准，7 大维度铸就经久耐用的好地板</p>
+          </div>
+        </div>
+
+        <div class="slideTxtBox-2">
+          <div class="hd">
             <ul>
               {HOME_ADVANTAGES.map((adv, i) => (
-                <li class={i === 0 ? 'on' : ''}>{adv.tab}</li>
+                <li class={i === 0 ? 'on' : ''}>
+                  <span class="adv-tab-num">0{i + 1}</span>
+                  <span>{adv.tab}</span>
+                </li>
               ))}
             </ul>
           </div>
-          <div class="bd f14">
+          <div class="bd">
             {HOME_ADVANTAGES.map((adv, i) => (
               <div class={`bd-div ${i === 0 ? 'is-active' : ''}`}>
-                <img width="220" height="273" src={adv.img} alt={adv.title} loading="lazy" />
+                <img width="260" height="320" src={adv.img} alt={adv.title} loading="lazy" />
                 <div>
+                  <span class="adv-panel-badge">ADVANTAGE 0{i + 1} · {adv.tab}</span>
                   <h4>{adv.title}</h4>
                   {adv.paragraphs.map((text) => (
                     <p>{text}</p>
@@ -201,98 +308,201 @@ const sectionSeries = sectionSeriesOrder.map((key) => PRODUCT_SERIES.find((s) =>
             ))}
           </div>
         </div>
-        <div class="seven-side">
-          <a href="/about/"><img src="/images/233-381.jpg" alt="宜耐品牌实力" loading="lazy" /></a>
-        </div>
       </div>
     </section>
 
-    <!-- 企业形象 + 新闻动态 -->
-    <section class="xingxiang-dongtai">
-      <div>
-        <div class="index-com-div-t">
-          <em><img src="/images/index-icon-3.png" alt="" /></em>
-          <h3>企业形象</h3>
-          <span class="f20 c7">Econice Factory</span>
-        </div>
-        <div class="xingxiang">
-          <a href="/about/"><img src="/images/gsxx.jpg" alt="宜耐企业形象" loading="lazy" /></a>
-        </div>
-      </div>
-
-      <div>
-        <div class="index-com-div-t">
-          <em><img src="/images/index-icon-4.png" alt="" /></em>
-          <h3>新闻动态</h3>
-          <span class="f20 c7">Econice News</span>
-        </div>
-        <ul class="dongtai border">
-          {latestNews.map((item) => (
-            <li>
-              <a href={getNewsUrl(item)}>
-                <img src={item.data.cover || '/images/logo.png'} width="147" height="78" alt={item.data.title} loading="lazy" />
-              </a>
-              <div class="dongtai-body">
-                <h4 class="f14">
-                  <a href={getNewsUrl(item)} title={item.data.title}>{item.data.title}</a>
-                  <span class="c7 f12">
-                    <img src="/images/index-icon-5.png" alt="" /> 时间：{formatShortDate(item.data.pubDate)}
-                  </span>
-                </h4>
-                <p>{(item.data.excerpt || item.data.description).slice(0, 46)}...</p>
-                <a class="cg" href={getNewsUrl(item)}>查看详情 &gt;&gt;</a>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    <!-- 常见问题 -->
-    <section class="index-question">
-      <div class="index-com-div-t">
-        <em><img src="/images/index-icon-6.png" alt="" /></em>
-        <h3>常见问题</h3>
-      </div>
-      <p class="tc">
-        竹地板一直是家装主材里默默无闻的小众产品，没有铺天盖地的广告，没有广为人知的品牌，只有大家熟悉的毛竹。<br />
-        消费者一直对竹地板心存疑惑，总是用怀疑的眼光看待这个质量非常好但没有大名气的产品。<br />
-        竹地板近年来在国外市场普遍开花和结果，广泛为国外家庭所接受并喜爱，因为他们都热爱中国、热爱中国的毛竹！
-      </p>
-    </section>
-
-    <section class="slideTxtBox-3">
-      <div class="hd">
-        <ul>
-          {faqs.map((item, i) => (
-            <li class={i === 0 ? 'on' : ''}>
-              <span>0{i + 1}</span>{item.data.title}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div class="bd border">
-        {faqs.map((item, i) => (
-          <div class={`bd-div ${i === 0 ? 'is-active' : ''}`}>
-            <img width="246" height="294" src={item.data.cover || '/images/logo.png'} alt={item.data.title} loading="lazy" />
-            <div>
-              <h4>{item.data.title}</h4>
-              <p class="f14">{item.data.excerpt || item.data.description}</p>
-              <a class="cg" href={getFaqUrl(item)}>查看详情 &gt;&gt;</a>
+    <!-- 6. 源头实力工厂（4 张实景照片展示） -->
+    <section class="home-factory-section">
+      <div class="w">
+        <div class="home-factory-grid">
+          <div class="home-factory-photos">
+            <div class="factory-photo-main">
+              <img src={HOME_FACTORY.mainImg} alt="宜耐地板现代化厂区外景" loading="lazy" />
+              <span class="factory-photo-badge">{HOME_FACTORY.mainBadge}</span>
+            </div>
+            <div class="factory-photo-subs">
+              {HOME_FACTORY.subImages.map((pic) => (
+                <div class="factory-sub-card">
+                  <img src={pic.img} alt={pic.label} loading="lazy" />
+                  <span>{pic.label}</span>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
+
+          <div class="home-factory-info">
+            <div class="home-sec-head">
+              <div>
+                <span class="home-sec-en">ECONICE FACTORY</span>
+                <h2 class="home-sec-title">源头实力工厂 · 德系标准智造</h2>
+              </div>
+            </div>
+            <p class="factory-lead">{HOME_FACTORY.lead}</p>
+            <ul class="factory-points">
+              {HOME_FACTORY.points.map((pt) => (
+                <li>
+                  <span class="factory-point-icon" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3.5 8.5 6.5 11.5 12.5 5"></polyline>
+                    </svg>
+                  </span>
+                  <span>{pt}</span>
+                </li>
+              ))}
+            </ul>
+            <div class="factory-certs">
+              {HOME_FACTORY.certs.map((cert) => (
+                <span>{cert}</span>
+              ))}
+            </div>
+            <div class="factory-actions">
+              <a class="home-btn-primary" href="/about/">
+                <span>深入了解宜耐工厂</span>
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="3" y1="8" x2="13" y2="8"></line>
+                  <polyline points="9 4 13 8 9 12"></polyline>
+                </svg>
+              </a>
+              <a class="home-btn-ghost" href="/anli/">查看全国工程案例</a>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- 底部 4 图 -->
-    <section class="two-things">
-      <p class="tc"><img src="/images/two-things.jpg" alt="宜耐地板品质承诺" loading="lazy" /></p>
-      <ul>
-        {HOME_BOTTOM_IMAGES.map((item) => (
-          <li><img width="283" height="239" src={item.img} alt={item.alt} loading="lazy" /></li>
-        ))}
-      </ul>
+    <!-- 7. 新闻动态 -->
+    <section class="home-news-section">
+      <div class="w">
+        <div class="home-sec-head">
+          <div>
+            <span class="home-sec-en">ECONICE NEWS</span>
+            <h2 class="home-sec-title">新闻动态与选购指南</h2>
+          </div>
+          <a class="home-more-pill" href="/news/">
+            <span>全部资讯</span>
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="3" y1="8" x2="13" y2="8"></line>
+              <polyline points="9 4 13 8 9 12"></polyline>
+            </svg>
+          </a>
+        </div>
+
+        <ul class="home-news-grid">
+          {latestNews.map((item) => (
+            <li>
+              <a class="home-news-card" href={getNewsUrl(item)}>
+                <div class="home-news-thumb">
+                  <img src={item.data.cover || '/images/logo.png'} width="300" height="188" alt={item.data.title} loading="lazy" />
+                </div>
+                <div class="home-news-body">
+                  <span class="home-news-date">{formatShortDate(item.data.pubDate)}</span>
+                  <h3 class="home-news-title" title={item.data.title}>{item.data.title}</h3>
+                  <p class="home-news-excerpt">{item.data.excerpt || item.data.description}</p>
+                  <span class="home-news-more">
+                    <span>阅读全文</span>
+                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="6 3.5 10.5 8 6 12.5"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 8. 常见问题解答（兼容 site.js .slideTxtBox-3） -->
+    <section class="home-faq-section">
+      <div class="w">
+        <div class="home-sec-head">
+          <div>
+            <span class="home-sec-en">FAQ &amp; EXPERT GUIDE</span>
+            <h2 class="home-sec-title">竹地板常见问题解答</h2>
+            <p class="home-sec-sub">针对北方气候、地暖适配、防潮防虫与日常维护等疑问，由宜耐技术团队为您专业解答</p>
+          </div>
+          <a class="home-more-pill" href="/faq/">
+            <span>更多问答</span>
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="3" y1="8" x2="13" y2="8"></line>
+              <polyline points="9 4 13 8 9 12"></polyline>
+            </svg>
+          </a>
+        </div>
+
+        <div class="slideTxtBox-3">
+          <div class="hd">
+            <ul>
+              {faqs.map((item, i) => (
+                <li class={i === 0 ? 'on' : ''}>
+                  <span class="faq-num">0{i + 1}</span>
+                  <span>{item.data.title}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="bd">
+            {faqs.map((item, i) => (
+              <div class={`bd-div ${i === 0 ? 'is-active' : ''}`}>
+                <img width="230" height="270" src={item.data.cover || '/images/logo.png'} alt={item.data.title} loading="lazy" />
+                <div>
+                  <h4>{item.data.title}</h4>
+                  <p>{item.data.excerpt || item.data.description}</p>
+                  <a class="home-more-pill" href={getFaqUrl(item)}>
+                    <span>查看完整解答</span>
+                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="3" y1="8" x2="13" y2="8"></line>
+                      <polyline points="9 4 13 8 9 12"></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. 品质实景画廊 + 底部合作引导条 -->
+    <section class="home-gallery-section">
+      <div class="w">
+        <div class="home-sec-head home-sec-head--center">
+          <span class="home-sec-en">QUALITY SHOWCASE</span>
+          <h2 class="home-sec-title">匠心铺就每一寸空间</h2>
+          <p class="home-sec-sub">天然竹韵与精密工艺的结合，兼顾居家温馨与高强度商业、户外应用需求</p>
+        </div>
+
+        <div class="home-gallery-grid">
+          {HOME_BOTTOM_IMAGES.map((item) => (
+            <figure class="home-gallery-card">
+              <img width="283" height="239" src={item.img} alt={item.alt} loading="lazy" />
+              <figcaption>{item.alt}</figcaption>
+            </figure>
+          ))}
+        </div>
+
+        <div class="home-cta-banner">
+          <div class="home-cta-text">
+            <h3>寻找稳定可靠的竹地板与 SPC 石塑源头厂家？</h3>
+            <p>欢迎全国经销商、设计师、装饰公司与工程采购商联系洽谈，支持免费寄样与来厂考察</p>
+          </div>
+          <div class="home-cta-actions">
+            <a class="home-btn-primary" href="/shenqing/">
+              <span>在线申请招商加盟</span>
+              <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="3" y1="8" x2="13" y2="8"></line>
+                <polyline points="9 4 13 8 9 12"></polyline>
+              </svg>
+            </a>
+            <a class="home-cta-tel" href={`tel:${SITE.phoneRaw}`}>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              <span>{SITE.phoneTel}</span>
+            </a>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 
@@ -308,7 +518,6 @@ const sectionSeries = sectionSeriesOrder.map((key) => PRODUCT_SERIES.find((s) =>
         tab.addEventListener('click', () => {
           if (window.innerWidth > 640) return;
 
-          // 再次点击当前已展开的分类则收起
           if (box.classList.contains('mobile-expanded') && mobileActiveIdx === idx) {
             box.classList.remove('mobile-expanded');
             mobileActiveIdx = -1;
