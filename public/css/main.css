@@ -2069,3 +2069,20 @@ p.pages a.on, p.pages a:hover, p.pages span.page-current {
     transform: rotate(180deg);
   }
 }
+
+/* 修复面包屑定位图标（替换原带裁切的 posi.png 为高清矢量图标） */
+.posi {
+  padding-left: 30px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239BC713' fill-rule='evenodd' d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 center;
+  background-size: 24px 24px;
+}
+
+@media (max-width: 640px) {
+  .posi {
+    padding-left: 24px;
+    background-position: 0 10px;
+    background-size: 18px 18px;
+  }
+}
