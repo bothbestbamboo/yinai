@@ -30,7 +30,7 @@ const { Content } = await render(entry);
 
   <div class="w">
     <div class="posi">
-      当前位置：<a href="/">首页</a> - <a href="/anli/">工程案例</a>
+      当前位置：<a href="/">首页</a> - <a href="/anli/">工程案例</a> - <span>案例详情</span>
     </div>
   </div>
 
@@ -39,22 +39,24 @@ const { Content } = await render(entry);
 
     <article class="news-deta">
       <div class="news-deta-cont">
-        <h1 class="tc c6" style="line-height:1.5;padding:14px 0 8px;font-size:26px;">{entry.data.title}</h1>
-        {entry.data.pubDate && (
-          <p class="news-deta-p tc f14 cg">发布日期：{entry.data.pubDate}</p>
-        )}
+        <header class="article-header">
+          <h1>{entry.data.title}</h1>
+          {entry.data.pubDate && (
+            <p class="news-deta-p">发布日期：{entry.data.pubDate}</p>
+          )}
+        </header>
         <div class="news-deta-body">
           {entry.data.cover && <img src={entry.data.cover} alt={entry.data.title} />}
           {entry.data.summary && <p>{entry.data.summary}</p>}
           <Content />
         </div>
       </div>
-      <div class="pian f14">
-        <p class="cr">
+      <div class="pian">
+        <p>
           <span>上一篇：</span>
           {prevItem ? <a href={getAnliUrl(prevItem)}>{prevItem.data.title}</a> : <a href="/anli/">返回列表</a>}
         </p>
-        <p class="cr">
+        <p>
           <span>下一篇：</span>
           {nextItem ? <a href={getAnliUrl(nextItem)}>{nextItem.data.title}</a> : <a href="/anli/">返回列表</a>}
         </p>

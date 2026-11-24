@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SubBanner from '../../components/SubBanner.astro';
+
+const HOT_KEYWORDS = ['重竹地板', 'SPC石塑', '户外地板', '家具板材', '本色', '碳化', '地暖'];
 ---
 <BaseLayout
   title="站内搜索 | 宜耐地板"
@@ -10,23 +12,38 @@ import SubBanner from '../../components/SubBanner.astro';
 
   <div class="w">
     <div class="posi">
-      当前位置：<a href="/">首页</a> - <b>站内搜索</b>
+      当前位置：<a href="/">首页</a> - <span>站内搜索</span>
     </div>
 
-    <form class="search-page-bar" id="searchPageForm">
-      <input type="text" id="searchInput" name="q" placeholder="输入关键词，例如：重竹、石塑、15mm、地暖、E61036..." />
-      <button type="submit">搜一搜</button>
-    </form>
+    <div class="search-box-card">
+      <form class="search-page-bar" id="searchPageForm">
+        <input type="text" id="searchInput" name="q" placeholder="输入产品名称、型号编号、厚度或文章关键词，例如：重竹、15mm、E61036..." autocomplete="off" />
+        <button type="submit">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="20" y1="20" x2="16.2" y2="16.2"></line>
+          </svg>
+          <span>搜一搜</span>
+        </button>
+      </form>
+
+      <div class="search-hot-row" id="searchHotTags">
+        <span class="search-hot-label">热门搜索：</span>
+        {HOT_KEYWORDS.map((kw) => (
+          <button type="button" class="search-hot-pill" data-kw={kw}>{kw}</button>
+        ))}
+      </div>
+    </div>
 
     <div class="search-tabs" id="searchTabs">
-      <button type="button" class="search-tab on" data-type="all">全部</button>
+      <button type="button" class="search-tab on" data-type="all">全部结果</button>
       <button type="button" class="search-tab" data-type="product">宜耐产品</button>
       <button type="button" class="search-tab" data-type="news">宜耐新闻</button>
       <button type="button" class="search-tab" data-type="anli">工程案例</button>
       <button type="button" class="search-tab" data-type="faq">常见问题</button>
     </div>
 
-    <p class="search-meta" id="searchMeta">请输入关键词开始搜索。</p>
+    <p class="search-meta" id="searchMeta">请输入关键词或点击上方热门标签开始搜索。</p>
     <div class="search-results" id="searchResults"></div>
   </div>
 </BaseLayout>
@@ -35,6 +52,7 @@ import SubBanner from '../../components/SubBanner.astro';
   (async function () {
     const form = document.getElementById('searchPageForm');
     const input = document.getElementById('searchInput');
+    const hotTags = document.getElementById('searchHotTags');
     const tabs = document.getElementById('searchTabs');
     const meta = document.getElementById('searchMeta');
     const resultsEl = document.getElementById('searchResults');
@@ -54,7 +72,7 @@ import SubBanner from '../../components/SubBanner.astro';
       let out = esc(text);
       terms.forEach((t) => {
         if (!t) return;
-        const safe = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const safe = t.replace(/[.*+?^\${}()|[\]\\]/g, '\\\$&');
         out = out.replace(new RegExp(safe, 'gi'), (m) => `<mark>${m}</mark>`);
       });
       return out;
@@ -75,7 +93,7 @@ import SubBanner from '../../components/SubBanner.astro';
         return terms.every((t) => hay.includes(t));
       });
 
-      meta.innerHTML = `关键词 “<strong>${esc(q)}</strong>” 共找到 <strong class="cr">${matched.length}</strong> 条结果`;
+      meta.innerHTML = `关键词 “<strong>${esc(q)}</strong>” 共找到 <strong class="cr">${matched.length}</strong> 条相关结果`;
 
       if (matched.length === 0) {
         resultsEl.innerHTML = '<div class="empty-tip">未找到相关内容，请尝试更简短的关键词（如“竹地板”、“石塑”、“户外”）。</div>';
@@ -86,13 +104,13 @@ import SubBanner from '../../components/SubBanner.astro';
         .map(
           (item) => `
           <div class="search-item">
-            ${item.cover ? `<a href="${esc(item.url)}"><img src="${esc(item.cover)}" alt="${esc(item.title)}" loading="lazy" /></a>` : ''}
+            ${item.cover ? `<a class="search-item-thumb" href="\${esc(item.url)}"><img src="${esc(item.cover)}" alt="${esc(item.title)}" loading="lazy" /></a>` : ''}
             <div class="search-item-body">
               <h3>
                 <span class="search-badge">${esc(item.typeLabel)}</span>
                 <a href="${esc(item.url)}">${highlight(item.title, terms)}</a>
               </h3>
-              <p>${highlight((item.subtitle || '').slice(0, 120), terms)}</p>
+              <p>${highlight((item.subtitle || '').slice(0, 130), terms)}</p>
             </div>
           </div>`
         )
@@ -128,6 +146,15 @@ import SubBanner from '../../components/SubBanner.astro';
       const q = input.value.trim();
       try { sessionStorage.setItem('yinai_search_q', q); } catch {}
       runSearch(q);
+    });
+
+    hotTags?.addEventListener('click', (e) => {
+      const btn = e.target.closest('.search-hot-pill');
+      if (!btn) return;
+      const kw = btn.dataset.kw || '';
+      input.value = kw;
+      try { sessionStorage.setItem('yinai_search_q', kw); } catch {}
+      runSearch(kw);
     });
 
     tabs.addEventListener('click', (e) => {

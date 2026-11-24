@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SubBanner from '../../components/SubBanner.astro';
+import { SITE } from '../../data/site';
 
 const jiamengTabs = [
   { href: '/jiameng/', icon: '/images/six-1.png', label: '加盟前景', key: 'jiameng' },
@@ -21,92 +22,97 @@ const jiamengTabs = [
 
   <div class="w">
     <div class="posi">
-      当前位置：<a href="/">首页</a> - <a href="/jiameng/">招商加盟</a> - <a href="/shenqing/">加盟申请</a>
+      当前位置：<a href="/">首页</a> - <a href="/jiameng/">招商加盟</a> - <span>加盟申请</span>
     </div>
   </div>
 
   <div class="w">
-    <div class="zs-six">
+    <div class="zs-six-2">
       <ul>
         {jiamengTabs.map((tab) => (
           <li class={tab.key === 'shenqing' ? 'now' : ''}>
             <a href={tab.href}>
               <div><img src={tab.icon} alt={tab.label} /></div>
-              <p class="f14">{tab.label}</p>
+              <p>{tab.label}</p>
             </a>
           </li>
         ))}
       </ul>
     </div>
 
-    <div class="zs-body f14 c0">
+    <div class="zs-body">
       <div class="fackbook-wrap">
+        <div class="form-head">
+          <span class="form-badge">ONLINE APPLICATION</span>
+          <h1>在线提交招商加盟申请</h1>
+          <p>请填写以下基本信息，区域招商经理将在 1 个工作日内与您取得联系；如需加急对接，可直接致电 <strong>{SITE.phoneDisplay}</strong>。</p>
+        </div>
+
         <form id="joinForm" class="fackbook-form" action="https://api.web3forms.com/submit" method="POST">
           <input type="hidden" name="access_key" value="81ff5088-e596-4b27-851b-cbaf5ab4a4f9" />
           <input type="hidden" name="subject" value="宜耐地板官网 - 新的招商加盟申请" />
           <input type="hidden" name="from_name" value="宜耐地板官网" />
           <input type="checkbox" name="botcheck" style="display:none;" />
 
-          <div class="form-row">
-            <label for="name"><em>*</em>姓名</label>
-            <input id="name" name="姓名" type="text" required placeholder="请输入您的姓名" />
-          </div>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="name"><em>*</em>您的姓名</label>
+              <input id="name" name="姓名" type="text" required placeholder="请输入您的姓名" />
+            </div>
 
-          <div class="form-row">
-            <label><em>*</em>性别</label>
-            <div class="radio-group">
-              <label><input name="性别" type="radio" value="男" checked /> 男</label>
-              <label><input name="性别" type="radio" value="女" /> 女</label>
+            <div class="form-field">
+              <label><em>*</em>性别</label>
+              <div class="radio-pills">
+                <label class="radio-pill"><input name="性别" type="radio" value="男" checked /><span>先生（男）</span></label>
+                <label class="radio-pill"><input name="性别" type="radio" value="女" /><span>女士（女）</span></label>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="mycall"><em>*</em>移动电话</label>
+              <input id="mycall" name="联系电话" type="text" required placeholder="请输入手机号码" />
+            </div>
+
+            <div class="form-field">
+              <label for="qq">微信 / QQ号码</label>
+              <input id="qq" name="微信或QQ" type="text" placeholder="选填，方便发送电子画册与政策" />
+            </div>
+
+            <div class="form-field">
+              <label for="city"><em>*</em>意向加盟城市</label>
+              <input id="city" name="加盟城市" type="text" required placeholder="如：浙江省杭州市" />
+            </div>
+
+            <div class="form-field">
+              <label><em>*</em>店面情况</label>
+              <div class="radio-pills">
+                <label class="radio-pill"><input name="店面情况" type="radio" value="自有" checked /><span>自有店面</span></label>
+                <label class="radio-pill"><input name="店面情况" type="radio" value="租赁" /><span>租赁店面</span></label>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="wzsm"><em>*</em>店面位置说明</label>
+              <input id="wzsm" name="位置说明" type="text" required placeholder="如：某某建材市场A区" />
+            </div>
+
+            <div class="form-field">
+              <label for="bj"><em>*</em>预计店面面积</label>
+              <input id="bj" name="店面面积" type="text" required placeholder="如：120平方米" />
+            </div>
+
+            <div class="form-field form-field--full">
+              <label for="ms">过往从业经验与补充说明</label>
+              <textarea id="ms" name="从业经验" placeholder="请简述您目前从事的行业、经营年限、公司名称或合作意向（选填）"></textarea>
             </div>
           </div>
 
-          <div class="form-row">
-            <label for="city"><em>*</em>加盟区域 / 具体城市名</label>
-            <input id="city" name="加盟城市" type="text" required placeholder="如：浙江省杭州市" />
+          <div class="form-submit-bar">
+            <button type="submit" class="submit-btn" id="submitBtn">提交加盟申请</button>
+            <span class="form-privacy-note">您的信息仅用于宜耐地板招商对接，我们将严格保密</span>
           </div>
 
-          <div class="form-row">
-            <label for="mycall"><em>*</em>移动电话</label>
-            <input id="mycall" name="联系电话" type="text" required placeholder="请输入手机号码" />
-          </div>
-
-          <div class="form-row">
-            <label for="qq">微信 / QQ号码</label>
-            <input id="qq" name="微信或QQ" type="text" placeholder="选填" />
-          </div>
-
-          <div class="form-row">
-            <label><em>*</em>店面情况</label>
-            <div class="radio-group">
-              <label><input name="店面情况" type="radio" value="自有" checked /> 自有</label>
-              <label><input name="店面情况" type="radio" value="租赁" /> 租赁</label>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <label for="wzsm"><em>*</em>位置说明</label>
-            <input id="wzsm" name="位置说明" type="text" required placeholder="如：某某建材市场A区" />
-          </div>
-
-          <div class="form-row">
-            <label for="bj"><em>*</em>面积</label>
-            <input id="bj" name="店面面积" type="text" required placeholder="如：120平方米" />
-          </div>
-
-          <div class="form-row">
-            <label for="ms">申请人过往从业经验描述</label>
-            <div>
-              <textarea id="ms" name="从业经验" placeholder="何种生意、经营时间、公司名称、主要业务等"></textarea>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <span></span>
-            <div>
-              <button type="submit" class="submit-btn" id="submitBtn">提交加盟申请</button>
-              <p id="formResult" style="margin-top:12px;font-weight:700;"></p>
-            </div>
-          </div>
+          <p id="formResult" class="form-result" role="status" aria-live="polite"></p>
         </form>
       </div>
     </div>
@@ -123,7 +129,7 @@ const jiamengTabs = [
       e.preventDefault();
       btn.disabled = true;
       btn.textContent = '正在提交...';
-      result.style.color = '#666';
+      result.className = 'form-result is-pending';
       result.textContent = '正在发送您的申请，请稍候...';
 
       try {
@@ -134,15 +140,15 @@ const jiamengTabs = [
         });
         const data = await res.json();
         if (data.success) {
-          result.style.color = '#5b8a00';
-          result.textContent = '提交成功！我们已收到您的加盟申请，招商经理将尽快与您联系。';
+          result.className = 'form-result is-success';
+          result.textContent = '提交成功！我们已收到您的加盟申请，区域招商经理将尽快与您联系。';
           form.reset();
         } else {
-          result.style.color = '#D20000';
+          result.className = 'form-result is-error';
           result.textContent = '提交失败：' + (data.message || '请稍后重试或直接致电 150-0582-0528。');
         }
       } catch {
-        result.style.color = '#D20000';
+        result.className = 'form-result is-error';
         result.textContent = '网络异常，请检查网络后重试，或直接致电 150-0582-0528。';
       } finally {
         btn.disabled = false;

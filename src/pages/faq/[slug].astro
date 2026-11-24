@@ -30,7 +30,7 @@ const { Content } = await render(entry);
 
   <div class="w">
     <div class="posi">
-      当前位置：<a href="/">首页</a> - <a href="/faq/">常见问题</a>
+      当前位置：<a href="/">首页</a> - <a href="/faq/">常见问题</a> - <span>解答详情</span>
     </div>
   </div>
 
@@ -39,20 +39,22 @@ const { Content } = await render(entry);
 
     <article class="news-deta">
       <div class="news-deta-cont">
-        <h1 class="tc c6" style="line-height:1.5;padding:14px 0 8px;font-size:26px;">{entry.data.title}</h1>
-        {entry.data.pubDate && (
-          <p class="news-deta-p tc f14 cg">发布日期：{entry.data.pubDate}</p>
-        )}
+        <header class="article-header">
+          <h1>{entry.data.title}</h1>
+          {entry.data.pubDate && (
+            <p class="news-deta-p">发布日期：{entry.data.pubDate}</p>
+          )}
+        </header>
         <div class="news-deta-body">
           <Content />
         </div>
       </div>
-      <div class="pian f14">
-        <p class="cr">
+      <div class="pian">
+        <p>
           <span>上一篇：</span>
           {prevItem ? <a href={getFaqUrl(prevItem)}>{prevItem.data.title}</a> : <a href="/faq/">返回列表</a>}
         </p>
-        <p class="cr">
+        <p>
           <span>下一篇：</span>
           {nextItem ? <a href={getFaqUrl(nextItem)}>{nextItem.data.title}</a> : <a href="/faq/">返回列表</a>}
         </p>

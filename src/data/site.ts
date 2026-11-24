@@ -4,7 +4,7 @@ export const SITE = {
   phoneDisplay: '150.0582.0528',
   phoneTel: '150-0582-0528',
   phoneRaw: '15005820528',
-  email: 'kf@yinai.cn',
+  email: 'info@dazhuhai.com',
   address: '浙江安吉县天荒坪生态功能区雅风大道',
   beianGongan: '浙公网安备: 33052302000414号',
   beianIcp: '网站备案: 皖ICP备12007097号',
@@ -18,7 +18,7 @@ export const PRODUCT_SERIES = [
     tabName: '普竹地板',
     href: '/product/naiyong/',
     navImg: '/d/file/p/2017-08-14/4f23ad487aa8f38279ba32f86faf33f6.jpg',
-    cardImg: '/d/file/p/2017-08-14/75a3ae089f7248aa14a1a0470bf159a2.jpg',
+    cardImg: '/images/series-solid.jpg',
     homeBannerImg: '/images/nh1.jpg',
     icon: '/images/index-com-1.png',
     links: [
@@ -35,7 +35,7 @@ export const PRODUCT_SERIES = [
     tabName: '重竹地板',
     href: '/product/naimo/',
     navImg: '/d/file/p/2017-08-14/d8ab2aae7adcf4b691278a388568331a.jpg',
-    cardImg: '/d/file/p/2017-08-14/128111fc2b6df65b4b6c893e94eaaae2.jpg',
+    cardImg: '/images/series-strand.jpg',
     homeBannerImg: '/images/ns1.jpg',
     icon: '/images/index-com-2.png',
     links: [
@@ -52,7 +52,7 @@ export const PRODUCT_SERIES = [
     tabName: '户外地板',
     href: '/product/naifu/',
     navImg: '/d/file/p/2017-08-14/b84f1c7661bcbf1052994aeba59e5553.jpg',
-    cardImg: '/d/file/p/2017-08-14/bc8493626bda98598ddb804c04d3e5e1.jpg',
+    cardImg: '/images/series-decking.jpg',
     homeBannerImg: '/images/33.jpg',
     icon: '/images/index-com-3.png',
     links: [
@@ -69,7 +69,7 @@ export const PRODUCT_SERIES = [
     tabName: '家具板材',
     href: '/product/naijiu/',
     navImg: '/d/file/p/2017-08-14/70f5100a010f3974fcf11ee7c6b17df0.jpg',
-    cardImg: '/d/file/p/2017-08-14/fdc958ae9b66cd23d705905d8b6e237b.jpg',
+    cardImg: '/images/series-panels.jpg',
     homeBannerImg: '/images/44.jpg',
     icon: '/images/index-com-4.png',
     links: [
@@ -86,7 +86,7 @@ export const PRODUCT_SERIES = [
     tabName: '石塑地板',
     href: '/product/shisu/',
     navImg: '/d/file/p/2024-10-17/3be0b1407a18321176d77a5ccd2a4aae.jpg',
-    cardImg: '/d/file/p/2024-10-17/3be0b1407a18321176d77a5ccd2a4aae.jpg',
+    cardImg: '/images/series-shisu.jpg',
     homeBannerImg: '/images/spc-1.jpg',
     icon: '/images/index-com-5.png',
     links: [

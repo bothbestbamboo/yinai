@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SubBanner from './SubBanner.astro';
-import { PRODUCT_SERIES } from '../data/site';
+import { SITE, PRODUCT_SERIES } from '../data/site';
 import { getProductUrl, type ProductEntry } from '../utils/content';
 
 interface Props {
@@ -24,6 +24,15 @@ const seriesInfo = PRODUCT_SERIES.find((s) => s.key === product.data.category);
 const rightSeries = PRODUCT_SERIES.slice(0, 4);
 const related = sameCategory.filter((p) => p.data.slugName !== product.data.slugName).slice(0, 5);
 const backListHref = seriesInfo ? seriesInfo.href : '/product/';
+
+const specItems = [
+  { label: '产品型号', value: product.data.model },
+  { label: '表面油漆', value: product.data.specs.paint },
+  { label: '产品颜色', value: product.data.specs.colorText },
+  { label: '表面工艺', value: product.data.specs.surface },
+  { label: '环保等级', value: product.data.specs.eco },
+  { label: '单片规格', value: product.data.specs.size },
+].filter((item) => Boolean(item.value));
 ---
 <BaseLayout
   title={product.data.title}
@@ -39,74 +48,94 @@ const backListHref = seriesInfo ? seriesInfo.href : '/product/';
       {seriesInfo && (
         <> - <a href={seriesInfo.href}>{seriesInfo.name}</a></>
       )}
+      <> - <span>{product.data.title}</span></>
     </div>
   </div>
 
-  <div class="deta-three w3">
-    <div id="slideBox-2" class="slideBox-2">
-      <div class="bd">
+  <div class="w">
+    <div class="deta-three">
+      <div id="slideBox-2" class="slideBox-2">
+        <div class="bd">
+          <ul>
+            {gallery.map((img, i) => (
+              <li class={i === 0 ? 'is-active' : ''}>
+                <img src={img} alt={`${product.data.title} 图${i + 1}`} />
+              </li>
+            ))}
+          </ul>
+        </div>
+        {gallery.length > 1 && (
+          <>
+            <div class="hd">
+              <ul>
+                {gallery.map((img, i) => (
+                  <li class={i === 0 ? 'on' : ''}>
+                    <img src={img} alt={`${product.data.title} 缩略图${i + 1}`} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <a class="prev" href="javascript:void(0)" aria-label="上一张"></a>
+            <a class="next" href="javascript:void(0)" aria-label="下一张"></a>
+          </>
+        )}
+      </div>
+
+      <div class="deta-mid">
+        <div class="deta-mid-head">
+          {seriesInfo && <span class="deta-series-badge">{seriesInfo.name} · {seriesInfo.tabName}</span>}
+          <h1>{product.data.title}</h1>
+          {product.data.tagline && (
+            <p class="deta-tagline">{product.data.tagline}</p>
+          )}
+        </div>
+
+        {specItems.length > 0 && (
+          <ul class="deta-specs">
+            {specItems.map((spec) => (
+              <li>
+                <span class="deta-spec-label">{spec.label}</span>
+                <span class="deta-spec-val">{spec.value}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div class="deta-cta">
+          <a class="deta-btn-primary" href={`tel:${SITE.phoneRaw}`}>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            <span>电话咨询：{SITE.phoneDisplay}</span>
+          </a>
+          <a class="deta-btn-ghost" href="/shenqing/">免费索样 / 招商合作</a>
+        </div>
+      </div>
+
+      <div class="list-4">
+        <div class="ch-com-top-2">
+          <span>宜耐产品：<b class="cg">核心系列</b></span>
+        </div>
         <ul>
-          {gallery.map((img, i) => (
-            <li class={i === 0 ? 'is-active' : ''}>
-              <img src={img} alt={`${product.data.title} 图${i + 1}`} />
+          {rightSeries.map((s) => (
+            <li>
+              <a class="pr" href={s.href}>
+                <img width="142" height="215" src={s.cardImg} alt={s.name} loading="lazy" />
+                <p>{s.name}</p>
+              </a>
             </li>
           ))}
         </ul>
       </div>
-      {gallery.length > 1 && (
-        <>
-          <div class="hd">
-            <ul>
-              {gallery.map((img, i) => (
-                <li class={i === 0 ? 'on' : ''}>
-                  <img src={img} alt={`${product.data.title} 缩略图${i + 1}`} />
-                </li>
-              ))}
-            </ul>
-          </div>
-          <a class="prev" href="javascript:void(0)" aria-label="上一张"></a>
-          <a class="next" href="javascript:void(0)" aria-label="下一张"></a>
-        </>
-      )}
-    </div>
-
-    <div class="deta-mid">
-      <h1 class="n" style="line-height:40px;font-size:22px;margin-bottom:4px;">{product.data.title}</h1>
-      {product.data.tagline && (
-        <p><span class="cg">{product.data.tagline}</span></p>
-      )}
-      <ul class="c6">
-        {product.data.model && <li>型号：{product.data.model}</li>}
-        {product.data.specs.paint && <li>油漆：{product.data.specs.paint}</li>}
-        {product.data.specs.colorText && <li>颜色：{product.data.specs.colorText}</li>}
-        {product.data.specs.surface && <li>表面工艺：{product.data.specs.surface}</li>}
-        {product.data.specs.eco && <li>环保等级：{product.data.specs.eco}</li>}
-        {product.data.specs.size && <li>单片规格：{product.data.specs.size}</li>}
-      </ul>
-    </div>
-
-    <div class="list-4">
-      <div class="ch-com-top-2">
-        <span>宜耐产品：<b class="cg">核心系列</b></span>
-      </div>
-      <ul>
-        {rightSeries.map((s) => (
-          <li>
-            <a class="pr" href={s.href}>
-              <img width="142" height="215" src={s.cardImg} alt={s.name} loading="lazy" />
-              <p class="f16">{s.name}</p>
-            </a>
-          </li>
-        ))}
-      </ul>
     </div>
   </div>
 
   {related.length > 0 && (
-    <div class="w3" style="padding-bottom: 35px;">
-      <div class="border">
+    <div class="w deta-related-wrap">
+      <div class="deta-related-box">
         <div class="ch-com-top-2">
           <span>商品推荐：<b class="cg">{product.data.categoryName}</b></span>
+          <a href={backListHref} class="series-all-link">查看更多 →</a>
         </div>
         <div class="com-left-tj-2">
           <ul>
@@ -132,7 +161,7 @@ const backListHref = seriesInfo ? seriesInfo.href : '/product/';
     </div>
   )}
 
-  <div class="w3 sub-layout">
+  <div class="w sub-layout">
     <aside class="com-left">
       <div class="com-left-tj border">
         <div>最新产品</div>
@@ -158,7 +187,10 @@ const backListHref = seriesInfo ? seriesInfo.href : '/product/';
     </aside>
 
     <article class="pro-deta">
-      <img src="/images/deta-1.jpg" alt="商品详情" />
+      <div class="pro-deta-head">
+        <h2>商品详情</h2>
+        <span>PRODUCT DETAILS</span>
+      </div>
       <div class="pro-deta-cont">
         <Content />
       </div>

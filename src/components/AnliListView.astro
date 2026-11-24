@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Sidebar from './Sidebar.astro';
 import Pagination from './Pagination.astro';
 import SubBanner from './SubBanner.astro';
-import { getAnliUrl, type AnliEntry } from '../utils/content';
+import { getAnliUrl, formatShortDate, type AnliEntry } from '../utils/content';
 
 interface Props {
   items: AnliEntry[];
@@ -22,41 +22,49 @@ const { items, currentPage, totalPages } = Astro.props;
 
   <div class="w">
     <div class="posi">
-      当前位置：<a href="/">首页</a> - <a href="/anli/">工程案例</a>
+      当前位置：<a href="/">首页</a> - <span>工程案例</span>
     </div>
   </div>
 
   <div class="w sub-layout">
     <Sidebar />
 
-    <section class="list-5">
+    <section class="anli-list">
       <ul>
-        {items.map((item) => (
-          <li
-            data-modal="true"
-            data-img={item.data.cover || '/images/logo.png'}
-            data-title={item.data.title}
-            data-desc={item.data.summary || item.data.description}
-            data-href={getAnliUrl(item)}
-          >
-            <a class="pr" href={getAnliUrl(item)} title={item.data.title}>
-              <img width="309" height="278" src={item.data.cover || '/images/logo.png'} alt={item.data.title} loading="lazy" />
-              <p class="f16 tc">{item.data.title}</p>
-            </a>
-          </li>
-        ))}
+        {items.map((item) => {
+          const desc = item.data.summary || item.data.description;
+          return (
+            <li>
+              <a class="anli-list-thumb" href={getAnliUrl(item)} title={item.data.title}>
+                <img
+                  width="320"
+                  height="210"
+                  src={item.data.cover || '/images/logo.png'}
+                  alt={item.data.title}
+                  loading="lazy"
+                />
+              </a>
+              <div class="anli-list-body">
+                <div class="anli-list-meta">
+                  <span class="anli-tag">工程实景</span>
+                  {item.data.pubDate && (
+                    <span class="anli-date">{formatShortDate(item.data.pubDate)}</span>
+                  )}
+                </div>
+                <h3>
+                  <a href={getAnliUrl(item)}>{item.data.title}</a>
+                </h3>
+                {desc && <p>{desc}</p>}
+                <div class="anli-list-foot">
+                  <a class="news-more" href={getAnliUrl(item)}>查看案例详情 →</a>
+                </div>
+              </div>
+            </li>
+          );
+        })}
       </ul>
 
       <Pagination basePath="/anli" currentPage={currentPage} totalPages={totalPages} />
     </section>
-  </div>
-
-  <div class="zhezhaoceng" role="dialog" aria-modal="true" aria-label="案例预览">
-    <div class="li-cont">
-      <img src="" alt="案例大图" />
-      <h5 class="tc f16 b" style="margin:10px 0 6px;"><a href="#"></a></h5>
-      <p style="line-height:1.7;font-size:14px;"><a class="c6" href="#"></a></p>
-      <span class="shut" aria-label="关闭弹窗"></span>
-    </div>
   </div>
 </BaseLayout>

@@ -51,16 +51,20 @@ const serializedProducts = JSON.stringify(clientProducts).replace(/</g, '\\u003c
   </div>
 
   <div class="chanpin-two">
-    <div>
+    <div class="series-panel">
       <div class="ch-com-top">
         <span>产品分类：<b class="cg">五大系列</b></span>
+        <a href="/product/" class="series-all-link">全部产品 →</a>
       </div>
       <ul class="series-cards-grid">
         {PRODUCT_SERIES.map((series) => (
           <li>
             <a class="pr" href={series.href}>
-              <img width="142" height="215" src={series.cardImg} alt={series.name} />
-              <p>{series.name}</p>
+              <img src={series.cardImg} alt={series.name} loading="lazy" />
+              <div class="series-card-caption">
+                <p>{series.name}</p>
+                <span>{series.tabName}</span>
+              </div>
             </a>
           </li>
         ))}
@@ -74,11 +78,8 @@ const serializedProducts = JSON.stringify(clientProducts).replace(/</g, '\\u003c
       </div>
       <ul>
         {FILTER_GROUPS.map((group) => (
-          <li>
-            <dt>
-              <em><img src={group.icon} alt="" /></em>
-              <span class="c6">{group.label}：</span>
-            </dt>
+          <li data-group={group.key}>
+            <dt>{group.label}</dt>
             <div class="filter-options">
               {group.options.map((opt) => (
                 <button

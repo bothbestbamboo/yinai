@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SubBanner from '../../components/SubBanner.astro';
+import { SITE } from '../../data/site';
 import singlePagesData from '../../data/singlePages.json';
 
 interface SinglePageRecord {
@@ -13,9 +14,9 @@ interface SinglePageRecord {
 interface PageMeta {
   group: 'about' | 'jiameng' | 'product';
   label: string;
+  en: string;
   parentLabel: string;
   parentHref: string;
-  banner: string;
 }
 
 const ABOUT_TABS = [
@@ -35,15 +36,15 @@ const JIAMENG_TABS = [
 
 export async function getStaticPaths() {
   const PAGE_META: Record<string, PageMeta> = {
-    about: { group: 'about', label: '公司概况', parentLabel: '关于宜耐', parentHref: '/about/', banner: '/images/gy.jpg' },
-    nianzhi: { group: 'about', label: '公司年志', parentLabel: '关于宜耐', parentHref: '/about/', banner: '/images/gy.jpg' },
-    rongyu: { group: 'about', label: '公司荣誉', parentLabel: '关于宜耐', parentHref: '/about/', banner: '/images/gy.jpg' },
-    jiameng: { group: 'jiameng', label: '加盟前景', parentLabel: '招商加盟', parentHref: '/jiameng/', banner: '/images/zhaoshang-banner-bg.jpg' },
-    youshi: { group: 'jiameng', label: '加盟优势', parentLabel: '招商加盟', parentHref: '/jiameng/', banner: '/images/zhaoshang-banner-bg.jpg' },
-    zhichi: { group: 'jiameng', label: '加盟支持', parentLabel: '招商加盟', parentHref: '/jiameng/', banner: '/images/zhaoshang-banner-bg.jpg' },
-    tiaojian: { group: 'jiameng', label: '加盟条件', parentLabel: '招商加盟', parentHref: '/jiameng/', banner: '/images/zhaoshang-banner-bg.jpg' },
-    zhongduan: { group: 'jiameng', label: '终端形象', parentLabel: '招商加盟', parentHref: '/jiameng/', banner: '/images/zhaoshang-banner-bg.jpg' },
-    chanpinyoushi: { group: 'product', label: '产品优势', parentLabel: '宜耐产品', parentHref: '/product/', banner: '/images/chanpin-banner-bg.jpg' },
+    about: { group: 'about', label: '公司概况', en: 'COMPANY PROFILE', parentLabel: '关于宜耐', parentHref: '/about/' },
+    nianzhi: { group: 'about', label: '公司年志', en: 'MILESTONES', parentLabel: '关于宜耐', parentHref: '/about/' },
+    rongyu: { group: 'about', label: '公司荣誉', en: 'HONORS & AWARDS', parentLabel: '关于宜耐', parentHref: '/about/' },
+    jiameng: { group: 'jiameng', label: '加盟前景', en: 'MARKET PROSPECTS', parentLabel: '招商加盟', parentHref: '/jiameng/' },
+    youshi: { group: 'jiameng', label: '加盟优势', en: 'OUR ADVANTAGES', parentLabel: '招商加盟', parentHref: '/jiameng/' },
+    zhichi: { group: 'jiameng', label: '加盟支持', en: 'DEALER SUPPORT', parentLabel: '招商加盟', parentHref: '/jiameng/' },
+    tiaojian: { group: 'jiameng', label: '加盟条件', en: 'REQUIREMENTS', parentLabel: '招商加盟', parentHref: '/jiameng/' },
+    zhongduan: { group: 'jiameng', label: '终端形象', en: 'SHOWROOM IMAGE', parentLabel: '招商加盟', parentHref: '/jiameng/' },
+    chanpinyoushi: { group: 'product', label: '产品优势', en: 'PRODUCT ADVANTAGES', parentLabel: '宜耐产品', parentHref: '/product/' },
   };
 
   const pages = singlePagesData as Record<string, SinglePageRecord>;
@@ -84,7 +85,7 @@ const tabs = meta.group === 'about' ? ABOUT_TABS : meta.group === 'jiameng' ? JI
             <li class={tab.key === pageKey ? 'now' : ''}>
               <a href={tab.href}>
                 <div><img src={tab.icon} alt={tab.label} /></div>
-                <p class="f14">{tab.label}</p>
+                <p>{tab.label}</p>
               </a>
             </li>
           ))}
@@ -92,9 +93,29 @@ const tabs = meta.group === 'about' ? ABOUT_TABS : meta.group === 'jiameng' ? JI
       </div>
     )}
 
-    <article
-      class="zs-body f14 c0"
-      set:html={content.bodyHtml.replace(/<img(?![^>]*\bloading=)/gi, '<img loading="lazy" decoding="async"')}
-    />
+    <article class="zs-body">
+      <header class="single-page-head">
+        <h1>{meta.label}</h1>
+        <span>{meta.en}</span>
+      </header>
+
+      <div
+        class="single-page-content"
+        set:html={content.bodyHtml.replace(/<img(?![^>]*\bloading=)/gi, '<img loading="lazy" decoding="async"')}
+      />
+
+      {meta.group === 'jiameng' && (
+        <div class="jiameng-cta-box">
+          <div class="jiameng-cta-text">
+            <h3>有意携手宜耐地板开拓本地市场？</h3>
+            <p>源头厂家直供，提供选址评估、店面设计、样品扶持与系统培训，欢迎各地经销商、设计师及装饰公司洽谈合作。</p>
+          </div>
+          <div class="jiameng-cta-actions">
+            <a class="deta-btn-primary" href="/shenqing/">在线提交加盟申请 →</a>
+            <a class="deta-btn-ghost" href={`tel:${SITE.phoneRaw}`}>招商热线：{SITE.phoneDisplay}</a>
+          </div>
+        </div>
+      )}
+    </article>
   </div>
 </BaseLayout>
