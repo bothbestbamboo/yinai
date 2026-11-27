@@ -24,6 +24,26 @@ export async function getStaticPaths() {
 
 const { entry, prevItem, nextItem } = Astro.props;
 const { Content } = await render(entry);
+
+// 读取 Frontmatter 封面图（兼容 cover / image / thumb 字段）
+const entryData = entry.data as Record<string, any>;
+const coverImage = String(
+  entryData.cover || entryData.image || entryData.thumb || ''
+).trim();
+
+// 自动去重检测：如果旧文章正文里已经包含同一张封面图，顶部不会重复渲染
+const rawBody = entry.body ?? '';
+let decodedCover = coverImage;
+try {
+  decodedCover = decodeURI(coverImage);
+} catch {
+  decodedCover = coverImage;
+}
+const isCoverAlreadyInBody = Boolean(
+  coverImage &&
+    (rawBody.includes(coverImage) || (decodedCover && rawBody.includes(decodedCover)))
+);
+const showCover = Boolean(coverImage && !isCoverAlreadyInBody);
 ---
 <BaseLayout
   title={entry.data.title}
@@ -50,6 +70,19 @@ const { Content } = await render(entry);
             <p class="news-deta-p">发布日期：{entry.data.pubDate}</p>
           )}
         </header>
+
+        {showCover && (
+          <figure class="news-deta-cover">
+            <img
+              src={coverImage}
+              alt={entry.data.title}
+              loading="eager"
+              decoding="async"
+              onerror="this.parentElement.remove()"
+            />
+          </figure>
+        )}
+
         <div class="news-deta-body">
           <Content />
         </div>
@@ -67,3 +100,30 @@ const { Content } = await render(entry);
     </article>
   </div>
 </BaseLayout>
+
+<style>
+  .news-deta-cover {
+    margin: 0 0 24px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8fafc;
+  }
+
+  .news-deta-cover img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  @media (max-width: 767px) {
+    .news-deta-cover {
+      margin-bottom: 18px;
+    }
+    .news-deta-cover img {
+      max-height: 300px;
+    }
+  }
+</style>
