@@ -10,7 +10,14 @@ const { activeNav = '' } = Astro.props;
   <div class="head">
     <div class="w head-inner">
       <div class="head-logo">
-        <a href="/"><img src="/images/logo.png" alt="宜耐地板 Econice" /></a>
+        <a class="head-logo-link" href="/" aria-label="宜耐地板 Econice 首页">
+          <img src="/images/logo2.png" alt="宜耐地板 Econice" />
+          <span class="head-logo-divider" aria-hidden="true"></span>
+          <span class="head-logo-slogan">
+            <strong class="head-slogan-main">宜家宜室 · 耐用品质</strong>
+            <span class="head-slogan-sub">竹木与SPC石塑地板源头厂家</span>
+          </span>
+        </a>
       </div>
       <div class="head-right">
         <form class="search-form" action="/search/" method="get">
